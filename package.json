@@ -1,0 +1,14 @@
+{
+  "name": "bastion",
+  "description": "👀",
+  "version": "1.0.0",
+  "packageManager": "pnpm@6.31.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GauBen/bastion.git"
+  },
+  "scripts": {
+    "dev": "pnpm run dev --recursive"
+  }
+}
