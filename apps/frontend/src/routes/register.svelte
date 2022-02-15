@@ -35,6 +35,7 @@
   input {
     width: 100%;
     border-radius: 0.5em;
+    border-color: $border;
   }
 
   button {

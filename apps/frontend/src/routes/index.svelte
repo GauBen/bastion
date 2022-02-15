@@ -1,2 +1,72 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  let people = [
+    { display: 'Alice', user: 'alice' },
+    { display: 'Bob', user: 'bob' },
+    { display: 'Eve', user: 'eve' },
+  ]
+</script>
+
+<div class="people">
+  {#each people as person}
+    <div class="person">
+      <img
+        src="https://dummyimage.com/64/{(
+          Math.random().toString(16) + '000000'
+        ).substring(2, 8)}"
+        alt="{person.display} picture"
+        width={64}
+        height={64}
+      />
+      <a class="display-name" href="/chat/{person.user}">{person.display}</a>
+      <span class="user-name">{person.user}</span>
+    </div>
+  {/each}
+</div>
+
+<style lang="scss">
+  :global(#app) {
+    min-height: 100vh;
+    background-color: $background;
+  }
+
+  .people {
+    box-shadow: 0 1em 2em $shadow;
+  }
+
+  .person {
+    position: relative;
+    padding: 1em;
+    background-color: $light-background;
+    display: grid;
+    grid-template-columns: 4em 1fr;
+    column-gap: 0.5em;
+
+    > img {
+      grid-row: 1 / 3;
+      border-radius: 50%;
+    }
+  }
+
+  .person + .person {
+    background-color: $light-background;
+    border-top: 1px solid $border;
+  }
+
+  .display-name {
+    align-self: end;
+    color: inherit;
+    font-weight: bold;
+    text-decoration: inherit;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  }
+
+  .user-name {
+    opacity: 0.75;
+  }
+</style>
