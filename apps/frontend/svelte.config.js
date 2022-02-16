@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
 
+const __dirname = new URL('.', import.meta.url).pathname
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://github.com/sveltejs/svelte-preprocess
@@ -8,7 +10,7 @@ const config = {
   preprocess: [
     preprocess({
       scss: {
-        prependData: '@use "src/variables.scss" as *;',
+        prependData: `@use "${__dirname}/src/variables.scss" as *;`,
       },
     }),
   ],
@@ -20,7 +22,7 @@ const config = {
       css: {
         preprocessorOptions: {
           scss: {
-            additionalData: '@use "src/variables.scss" as *;',
+            additionalData: `@use "${__dirname}/src/variables.scss" as *;`,
           },
         },
       },
