@@ -2,12 +2,16 @@
   <form on:submit|preventDefault>
     <h1>Register</h1>
     <p>
-      <label for="username">Username</label><br />
-      <input type="text" id="username" required />
+      <label>
+        Username<br />
+        <input type="text" required />
+      </label>
     </p>
     <p>
-      <label for="displayname">Dislay name</label><br />
-      <input type="text" id="displayname" required />
+      <label>
+        Dislay name<br />
+        <input type="text" required />
+      </label>
     </p>
     <p class="center"><button>Register</button></p>
   </form>
