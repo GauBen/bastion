@@ -98,7 +98,7 @@ importers:
       dotenv: 16.0.0
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
-      eslint-plugin-svelte3: 3.4.0_eslint@7.32.0+svelte@3.46.4
+      eslint-plugin-svelte3: link:../../../eslint-plugin-svelte3
       prettier: 2.5.1
       prettier-plugin-svelte: 2.6.0_prettier@2.5.1+svelte@3.46.4
       sanitize.css: 13.0.0
@@ -2886,17 +2886,6 @@ packages:
       eslint-config-prettier: 8.3.0_eslint@8.9.0
       prettier: 2.5.1
       prettier-linter-helpers: 1.0.0
-    dev: true
-
-  /eslint-plugin-svelte3/3.4.0_eslint@7.32.0+svelte@3.46.4:
-    resolution: {integrity: sha512-MIQUTuRv3o7LyQ+360qOc9mLT35j1I5YzHr04g/UDcvJTpg0X/kHWELY99ve869Rp/9wjqD7I26Aq5H8OH5RIg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      eslint: '>=6.0.0'
-      svelte: ^3.2.0
-    dependencies:
-      eslint: 7.32.0
-      svelte: 3.46.4
     dev: true
 
   /eslint-scope/5.1.1:
