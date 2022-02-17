@@ -9,5 +9,7 @@ declare namespace App {
 
   interface Session {}
 
-  interface Stuff {}
+  interface Stuff {
+    title: string
+  }
 }

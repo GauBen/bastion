@@ -1,7 +1,13 @@
-<script>
+<script lang="ts" context="module">
   import Header from '$lib/Header.svelte'
-
   import Nav from '$lib/Nav.svelte'
+  import type { Load } from '@sveltejs/kit'
+
+  export const load: Load = () => ({
+    stuff: {
+      title: 'Settings',
+    },
+  })
 </script>
 
 <Header>Settings</Header>

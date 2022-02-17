@@ -1,6 +1,15 @@
-<script>
+<script lang="ts" context="module">
   import Nav from '$lib/Nav.svelte'
+  import type { Load } from '@sveltejs/kit'
 
+  export const load: Load = () => ({
+    stuff: {
+      title: 'Conversations',
+    },
+  })
+</script>
+
+<script lang="ts">
   let people = [
     { display: 'Alice', user: 'alice' },
     { display: 'Bob', user: 'bob' },

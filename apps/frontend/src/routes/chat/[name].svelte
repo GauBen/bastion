@@ -1,7 +1,16 @@
-<script lang="ts">
+<script lang="ts" context="module">
   import { page } from '$app/stores'
   import Header from '$lib/Header.svelte'
+  import type { Load } from '@sveltejs/kit'
 
+  export const load: Load = () => ({
+    stuff: {
+      title: 'Conversation',
+    },
+  })
+</script>
+
+<script lang="ts">
   let messages = [
     { me: true, body: 'Hello' },
     { me: false, body: 'Hi!' },

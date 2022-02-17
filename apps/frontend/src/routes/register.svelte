@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+  import type { Load } from '@sveltejs/kit'
+
+  export const load: Load = () => ({
+    stuff: {
+      title: 'Register',
+    },
+  })
+</script>
+
 <main>
   <form on:submit|preventDefault>
     <h1>Register</h1>
