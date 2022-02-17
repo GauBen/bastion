@@ -52,7 +52,6 @@
     svg {
       width: 1.5em;
       height: 1.5em;
-      fill: currentColor;
     }
   }
 </style>
