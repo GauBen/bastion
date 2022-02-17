@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores'
+  import Header from '$lib/Header.svelte'
 
   let messages = [
     { me: true, body: 'Hello' },
@@ -9,16 +10,7 @@
   let value = ''
 </script>
 
-<h1>
-  <a href="../..">
-    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"
-      />
-    </svg>
-  </a>
-  {$page.params.name}
-</h1>
+<Header>{$page.params.name}</Header>
 <div class="messages">
   {#each messages as { me, body }}
     <div class="message" class:me>

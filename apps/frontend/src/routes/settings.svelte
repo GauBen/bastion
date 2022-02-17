@@ -1,15 +1,19 @@
 <script>
   import Header from '$lib/Header.svelte'
+
   import Nav from '$lib/Nav.svelte'
 </script>
 
-<Header>New conversation</Header>
-<form action="">
+<Header>Settings</Header>
+<form on:submit|preventDefault>
   <p>
-    <label>To <input type="text" /></label>
+    <label>Display name<br /><input type="text" /></label>
+  </p>
+  <p>
+    <label>Profile picture<br /><input type="file" /></label>
   </p>
   <p class="center">
-    <button>Open conversation</button>
+    <button>Save</button>
   </p>
 </form>
 <Nav />
@@ -20,17 +24,6 @@
     flex-direction: column;
     height: 100vh;
     background-color: $background;
-  }
-
-  h1 {
-    margin: 0;
-    padding: 1rem;
-    background: $light-background;
-    border-bottom: 1px solid $border;
-
-    > a {
-      margin-right: 0.5rem;
-    }
   }
 
   form {
