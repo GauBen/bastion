@@ -2,6 +2,9 @@
   "name": "bastion",
   "description": "👀",
   "version": "1.0.0",
+  "dependencies": {
+    "@nestjs/core": "^8.3.0"
+  },
   "packageManager": "pnpm@6.31.0",
   "private": true,
   "repository": {
@@ -9,10 +12,8 @@
     "url": "git+https://github.com/GauBen/bastion.git"
   },
   "scripts": {
+    "build": "pnpm run build --recursive",
     "dev": "pnpm run dev --recursive"
   },
-  "type": "module",
-  "dependencies": {
-    "@nestjs/core": "^8.3.0"
-  }
+  "type": "module"
 }
