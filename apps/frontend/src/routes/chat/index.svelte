@@ -22,17 +22,6 @@
     background-color: $background;
   }
 
-  h1 {
-    margin: 0;
-    padding: 1rem;
-    background: $light-background;
-    border-bottom: 1px solid $border;
-
-    > a {
-      margin-right: 0.5rem;
-    }
-  }
-
   form {
     flex: 1;
     overflow: auto;

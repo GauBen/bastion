@@ -47,18 +47,6 @@
     background-color: $background;
   }
 
-  h1 {
-    margin: 0;
-    padding: 1rem;
-    background-color: $light-background;
-    border-bottom: 1px solid $border;
-    box-shadow: 0 -1em 2em $shadow;
-
-    > a {
-      margin-right: 0.5rem;
-    }
-  }
-
   form {
     display: flex;
     padding: 0.5rem;

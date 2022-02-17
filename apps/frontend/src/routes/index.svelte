@@ -13,9 +13,7 @@
     {#each people as person}
       <div class="person">
         <img
-          src="https://dummyimage.com/64/{(
-            Math.random().toString(16) + '000000'
-          ).substring(2, 8)}"
+          src="http://localhost:3000/image/{person.user}"
           alt="{person.display} picture"
           width={64}
           height={64}
