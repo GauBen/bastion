@@ -29,7 +29,7 @@
     display: flex;
     flex-direction: row;
     justify-content: stretch;
-    padding: 0.5em;
+    padding: 0.25em;
     background-color: $light-background;
     box-shadow: 0 1em 2em $shadow;
     z-index: 1;

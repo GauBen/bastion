@@ -55,12 +55,15 @@
     box-shadow: 0 1em 2em $shadow;
 
     > input {
+      height: 2em;
+      flex: 1;
+      padding: 0.25em;
       background: $light-background;
       border-radius: 0.5em;
-      flex: 1;
     }
 
     > button {
+      height: 2em;
       border: 0;
       background: none;
     }
