@@ -63,7 +63,7 @@
     box-shadow: 0 -1em 2em $shadow;
 
     > a {
-      margin-right: 1rem;
+      margin-right: 0.5rem;
     }
   }
 
