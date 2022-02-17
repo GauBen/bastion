@@ -10,5 +10,9 @@
   },
   "scripts": {
     "dev": "pnpm run dev --recursive"
+  },
+  "type": "module",
+  "dependencies": {
+    "@nestjs/core": "^8.3.0"
   }
 }
