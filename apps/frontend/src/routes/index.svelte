@@ -13,7 +13,7 @@
     {#each people as person}
       <div class="person">
         <img
-          src="http://localhost:3000/image/{person.user}"
+          src="/api/image/{person.user}"
           alt="{person.display} picture"
           width={64}
           height={64}

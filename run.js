@@ -1,13 +1,15 @@
-import { handler } from './apps/frontend/build/handler.js'
-import { AppModule } from './apps/backend/dist/app.module.js'
 import { NestFactory } from '@nestjs/core'
-
-console.log(handler, AppModule)
+import express from 'express'
+import { AppModule } from './apps/backend/dist/app.module.js'
+import { handler } from './apps/frontend/build/handler.js'
 
 const run = async () => {
-  const thing = await NestFactory.create(AppModule)
-  thing.use(handler)
-  thing.listen(3000)
+  const app = express()
+  const api = await NestFactory.create(AppModule)
+  await api.init()
+  app.use('/api', api.getHttpAdapter().getInstance())
+  app.use(handler)
+  app.listen(3000)
 }
 
 run()
