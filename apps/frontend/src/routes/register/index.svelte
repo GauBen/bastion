@@ -1,15 +1,6 @@
-<script lang="ts" context="module">
-  import { goto } from '$app/navigation'
-  import type { Load } from '@sveltejs/kit'
-
-  export const load: Load = () => ({
-    stuff: {
-      title: 'Register',
-    },
-  })
-</script>
-
 <script lang="ts">
+  import { goto } from '$app/navigation'
+
   let name = ''
   let displayName = ''
   let errors: { [x: string]: string[] } = {
@@ -21,11 +12,6 @@
     str.at(0).toUpperCase() + str.slice(1) + '.'
 
   const submit = async () => {
-    errors = {
-      name: [],
-      displayName: [],
-    }
-
     const response = await fetch('/api/register', {
       method: 'POST',
       headers: {
@@ -34,6 +20,10 @@
       body: JSON.stringify({ name, displayName }),
     })
     const body = await response.json()
+    errors = {
+      name: [],
+      displayName: [],
+    }
 
     if (response.status >= 400) {
       const messages: string[] = body?.message ?? []

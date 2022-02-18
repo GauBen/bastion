@@ -23,6 +23,11 @@ export class AppController {
     return this.appService.getHello()
   }
 
+  @Get('/user/:token')
+  async getUser(@Param('token') token: string): Promise<User | null> {
+    return this.userService.fromToken(token)
+  }
+
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.register(createUserDto)

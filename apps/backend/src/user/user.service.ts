@@ -8,6 +8,10 @@ import { CreateUserDto } from './user.dto'
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async fromToken(token: string): Promise<User | null> {
+    return this.prismaService.user.findUnique({ where: { token } })
+  }
+
   async register({ name, displayName }: CreateUserDto): Promise<User> {
     if (await this.prismaService.user.findUnique({ where: { name } })) {
       throw new BadRequestException(['name already taken'])

@@ -1,15 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /// <reference types="@sveltejs/kit" />
+
+import type { User } from '@prisma/client'
 
 // See https://kit.svelte.dev/docs/typescript
 // for information about these interfaces
-declare namespace App {
-  interface Locals {}
+global {
+  declare namespace App {
+    interface Locals {
+      user: User | null
+    }
 
-  interface Platform {}
+    interface Platform {}
 
-  interface Session {}
+    interface Session {
+      user: User | null
+    }
 
-  interface Stuff {
-    title: string
+    interface Stuff {
+      title: string
+    }
   }
 }
