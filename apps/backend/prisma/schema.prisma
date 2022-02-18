@@ -11,7 +11,20 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id               Int       @id @default(autoincrement())
+  name             String
+  displayName      String
+  token            String // Private session token, used to log the user in
+  messagesSent     Message[] @relation("sent")
+  messagesReceived Message[] @relation("received")
+}
+
+model Message {
+  id     Int     @id @default(autoincrement())
+  from   User    @relation(name: "sent", fields: [fromId], references: [id])
+  fromId Int
+  to     User    @relation(name: "received", fields: [toId], references: [id])
+  toId   Int
+  gif    Boolean
+  body   String
 }
