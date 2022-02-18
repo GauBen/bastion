@@ -5,10 +5,14 @@ importers:
   .:
     specifiers:
       '@nestjs/core': ^8.3.0
+      '@prisma/client': ^3.9.2
       express: ^4.17.3
+      prisma: ^3.9.2
     dependencies:
       '@nestjs/core': 8.3.0
+      '@prisma/client': 3.9.2_prisma@3.9.2
       express: 4.17.3
+      prisma: 3.9.2
 
   apps/backend:
     specifiers:
@@ -1122,7 +1126,6 @@ packages:
   /@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
     resolution: {integrity: sha512-qM+uJbkelB21bnK44gYE049YTHIjHysOuj0mj5U2gDGyNLfmiazlggzFPCgEjgme4U5YB2tYs6Z5Hq08Kl8pjA==}
     requiresBuild: true
-    dev: true
 
   /@rollup/pluginutils/4.1.2:
     resolution: {integrity: sha512-ROn4qvkxP9SyPeHaf7uQC/GPFY6L/OWy9+bd9AwcjOAWQwxRscoEyAUD8qCY5o5iL4jqQwoLk2kaTKJPb/HwzQ==}
@@ -5105,7 +5108,6 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
-    dev: true
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}

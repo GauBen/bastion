@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "dependencies": {
     "@nestjs/core": "^8.3.0",
-    "express": "^4.17.3"
+    "@prisma/client": "^3.9.2",
+    "express": "^4.17.3",
+    "prisma": "^3.9.2"
   },
   "packageManager": "pnpm@6.31.0",
   "private": true,
