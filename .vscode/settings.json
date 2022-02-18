@@ -1,6 +1,12 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.enable": true,
+  "prettier.enable": true,
+  "svelte.enable-ts-plugin": true,
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   }

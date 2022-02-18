@@ -18,6 +18,7 @@ importers:
       '@nestjs/platform-express': ^8.0.0
       '@nestjs/schematics': ^8.0.0
       '@nestjs/testing': ^8.0.0
+      '@prisma/client': ^3.9.2
       '@types/express': ^4.17.13
       '@types/jest': 27.0.2
       '@types/node': ^16.0.0
@@ -30,6 +31,7 @@ importers:
       eslint-plugin-prettier: ^4.0.0
       jest: ^27.2.5
       prettier: ^2.3.2
+      prisma: ^3.9.2
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       rxjs: ^7.2.0
@@ -44,6 +46,7 @@ importers:
       '@nestjs/common': 8.3.0_0a8b9973a45cbeaad6b0063efdcaad84
       '@nestjs/core': 8.3.0_da0e0651429c7d3361d04d1439021adb
       '@nestjs/platform-express': 8.3.0_3cc80dea73ec320916161aed2bdec5ed
+      '@prisma/client': 3.9.2_prisma@3.9.2
       canvas: 2.9.0
       reflect-metadata: 0.1.13
       rimraf: 3.0.2
@@ -63,6 +66,7 @@ importers:
       eslint-plugin-prettier: 4.0.0_07b422646bb75d3db791621d4fdbc992
       jest: 27.5.1_canvas@2.9.0+ts-node@10.5.0
       prettier: 2.5.1
+      prisma: 3.9.2
       source-map-support: 0.5.21
       supertest: 6.2.2
       ts-jest: 27.1.3_30df51dada2668f3ca80410dff00e7d9
@@ -92,13 +96,13 @@ importers:
       typescript: ~4.5.4
     devDependencies:
       '@sveltejs/adapter-node': 1.0.0-next.68
-      '@sveltejs/kit': 1.0.0-next.276_sass@1.49.7+svelte@3.46.4
+      '@sveltejs/kit': 1.0.0-next.278_sass@1.49.7+svelte@3.46.4
       '@typescript-eslint/eslint-plugin': 5.12.0_39008ab451aed7e12174fadc21405fee
       '@typescript-eslint/parser': 5.12.0_eslint@7.32.0+typescript@4.5.5
       dotenv: 16.0.0
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
-      eslint-plugin-svelte3: link:../../../eslint-plugin-svelte3
+      eslint-plugin-svelte3: 3.4.0_eslint@7.32.0+svelte@3.46.4
       prettier: 2.5.1
       prettier-plugin-svelte: 2.6.0_prettier@2.5.1+svelte@3.46.4
       sanitize.css: 13.0.0
@@ -1089,6 +1093,29 @@ packages:
       - encoding
     dev: false
 
+  /@prisma/client/3.9.2_prisma@3.9.2:
+    resolution: {integrity: sha512-VlEIYVMyfFZHbVBOlunPl47gmP/Z0zzPjPj8I7uKEIaABqrUy50ru3XS0aZd8GFvevVwt7p91xxkUjNjrWhKAQ==}
+    engines: {node: '>=12.6'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+      prisma: 3.9.2
+    dev: false
+
+  /@prisma/engines-version/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
+    resolution: {integrity: sha512-5Dh+qTDhpPR66w6NNAnPs+/W/Qt4r1DSd+qhfPFcDThUK4uxoZKGlPb2IYQn5LL+18aIGnmteDf7BnVMmvBNSQ==}
+    dev: false
+
+  /@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
+    resolution: {integrity: sha512-qM+uJbkelB21bnK44gYE049YTHIjHysOuj0mj5U2gDGyNLfmiazlggzFPCgEjgme4U5YB2tYs6Z5Hq08Kl8pjA==}
+    requiresBuild: true
+    dev: true
+
   /@rollup/pluginutils/4.1.2:
     resolution: {integrity: sha512-ROn4qvkxP9SyPeHaf7uQC/GPFY6L/OWy9+bd9AwcjOAWQwxRscoEyAUD8qCY5o5iL4jqQwoLk2kaTKJPb/HwzQ==}
     engines: {node: '>= 8.0.0'}
@@ -1115,8 +1142,8 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.276_sass@1.49.7+svelte@3.46.4:
-    resolution: {integrity: sha512-LuTnN1Nod+Eub7izlyWYRmoSrJD236fBOxNmOMsiaPDQhcHSbnOpaE9WJPWzQeDPm+E3b4u+mNUOfclXabQSlg==}
+  /@sveltejs/kit/1.0.0-next.278_sass@1.49.7+svelte@3.46.4:
+    resolution: {integrity: sha512-WT93Wnu05X9WG9BMMk/dj0gy6R7iXm9aXRDVgmIl9z8jT2ukejgmkhi5IwBYrK0OMIUALRVfukn+iy+srPc91Q==}
     engines: {node: '>=14.13'}
     hasBin: true
     peerDependencies:
@@ -2886,6 +2913,17 @@ packages:
       eslint-config-prettier: 8.3.0_eslint@8.9.0
       prettier: 2.5.1
       prettier-linter-helpers: 1.0.0
+    dev: true
+
+  /eslint-plugin-svelte3/3.4.0_eslint@7.32.0+svelte@3.46.4:
+    resolution: {integrity: sha512-MIQUTuRv3o7LyQ+360qOc9mLT35j1I5YzHr04g/UDcvJTpg0X/kHWELY99ve869Rp/9wjqD7I26Aq5H8OH5RIg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      eslint: '>=6.0.0'
+      svelte: ^3.2.0
+    dependencies:
+      eslint: 7.32.0
+      svelte: 3.46.4
     dev: true
 
   /eslint-scope/5.1.1:
@@ -5036,6 +5074,15 @@ packages:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+    dev: true
+
+  /prisma/3.9.2:
+    resolution: {integrity: sha512-i9eK6cexV74OgeWaH3+e6S07kvC9jEZTl6BqtBH398nlCU0tck7mE9dicY6YQd+euvMjjCtY89q4NgmaPnUsSg==}
+    engines: {node: '>=12.6'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
     dev: true
 
   /process-nextick-args/2.0.1:
