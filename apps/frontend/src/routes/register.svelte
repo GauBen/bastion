@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import { goto } from '$app/navigation'
   import type { Load } from '@sveltejs/kit'
 
   export const load: Load = () => ({
@@ -8,20 +9,73 @@
   })
 </script>
 
+<script lang="ts">
+  let name = ''
+  let displayName = ''
+  let errors: { [x: string]: string[] } = {
+    name: [],
+    displayName: [],
+  }
+
+  const toSentence = (str: string) =>
+    str.at(0).toUpperCase() + str.slice(1) + '.'
+
+  const submit = async () => {
+    errors = {
+      name: [],
+      displayName: [],
+    }
+
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, displayName }),
+    })
+    const body = await response.json()
+
+    if (response.status >= 400) {
+      const messages: string[] = body?.message ?? []
+      for (const message of messages) {
+        const index = message.indexOf(' ')
+        var [scope, details] = [
+          message.slice(0, index),
+          message.slice(index + 1),
+        ]
+        errors[scope].push(details)
+      }
+      // Trigger Svelte refresh
+      errors = errors
+      return
+    }
+
+    const { token } = body
+    document.cookie = `token=${token}; path=/; max-age=31536000`
+    goto('/')
+  }
+</script>
+
 <main>
-  <form on:submit|preventDefault>
+  <form on:submit|preventDefault={submit}>
     <h1>Register</h1>
     <p>
       <label>
         Username<br />
-        <input type="text" required />
+        <input type="text" required bind:value={name} />
       </label>
+      {#each errors.name as error}
+        <div class="error">{toSentence(error)}</div>
+      {/each}
     </p>
     <p>
       <label>
         Dislay name<br />
-        <input type="text" required />
+        <input type="text" required bind:value={displayName} />
       </label>
+      {#each errors.displayName as error}
+        <div class="error">{toSentence(error)}</div>
+      {/each}
     </p>
     <p class="center"><button>Register</button></p>
   </form>
@@ -61,5 +115,10 @@
 
   .center {
     text-align: center;
+  }
+
+  .error {
+    font-weight: bold;
+    color: $error;
   }
 </style>
