@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { createCanvas, PNGStream, registerFont } from 'canvas'
 
 @Injectable()
@@ -8,9 +8,15 @@ export class AppService {
   }
 
   getImage(letter: string): PNGStream {
-    registerFont(`${__dirname}/../resouces/Gilroy-ExtraBold.ttf`, {
-      family: 'Gilroy',
-    })
+    try {
+      registerFont(`${__dirname}/../resouces/Gilroy-ExtraBold.ttf`, {
+        family: 'Gilroy',
+      })
+    } catch (error: unknown) {
+      throw new BadRequestException(
+        error instanceof Error ? error.stack : 'Unknown error',
+      )
+    }
     const canvas = createCanvas(64, 64)
     const ctx = canvas.getContext('2d')
     ctx.fillStyle = '#C1DDD7'
