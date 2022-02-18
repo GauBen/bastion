@@ -12,9 +12,9 @@ datasource db {
 
 model User {
   id               Int       @id @default(autoincrement())
-  name             String
+  name             String    @unique
   displayName      String
-  token            String // Private session token, used to log the user in
+  token            String    @unique // Private session token, used to log the user in
   messagesSent     Message[] @relation("sent")
   messagesReceived Message[] @relation("received")
 }
@@ -25,6 +25,6 @@ model Message {
   fromId Int
   to     User    @relation(name: "received", fields: [toId], references: [id])
   toId   Int
-  gif    Boolean
+  gif    Boolean @default(false)
   body   String
 }

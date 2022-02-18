@@ -1,13 +1,31 @@
-import { Controller, Get, Param, StreamableFile } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  StreamableFile,
+} from '@nestjs/common'
+import { User } from '@prisma/client'
 import { AppService } from './app.service'
+import { CreateUserDto } from './user/user.dto'
+import { UserService } from './user/user.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get()
   getHello(): string {
     return this.appService.getHello()
+  }
+
+  @Post('/register')
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.register(createUserDto)
   }
 
   @Get('/image/:letter')
