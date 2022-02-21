@@ -2,33 +2,33 @@
   import Nav from '$lib/Nav.svelte'
   import type { Load } from '@sveltejs/kit'
 
-  export const load: Load = () => ({
-    stuff: {
-      title: 'Conversations',
-    },
+  export const load: Load = ({ props }) => ({
+    props,
+    stuff: { title: 'Conversations' },
   })
 </script>
 
 <script lang="ts">
-  let people = [
-    { display: 'Alice', user: 'alice' },
-    { display: 'Bob', user: 'bob' },
-    { display: 'Eve', user: 'eve' },
-  ]
+  export let contacts: {
+    displayName: string
+    name: string
+  }[]
 </script>
 
 <div class="people">
   <div class="shadow">
-    {#each people as person}
+    {#each contacts as contact}
       <div class="person">
         <img
-          src="/api/image/{person.user}"
-          alt="{person.display} picture"
+          src="/api/image/{contact.name}"
+          alt="{contact.displayName} picture"
           width={64}
           height={64}
         />
-        <a class="display-name" href="/chat/{person.user}">{person.display}</a>
-        <span class="user-name">{person.user}</span>
+        <a class="display-name" href="/chat/{contact.name}">
+          {contact.displayName}
+        </a>
+        <span class="user-name">{contact.name}</span>
       </div>
     {/each}
   </div>
