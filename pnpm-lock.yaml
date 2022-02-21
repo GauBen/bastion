@@ -7,11 +7,13 @@ importers:
       '@nestjs/core': ^8.3.0
       '@prisma/client': ^3.9.2
       express: ^4.17.3
+      nanoid: ^3.3.1
       prisma: ^3.9.2
     dependencies:
       '@nestjs/core': 8.3.0
       '@prisma/client': 3.9.2_prisma@3.9.2
       express: 4.17.3
+      nanoid: 3.3.1
       prisma: 3.9.2
 
   apps/backend:
