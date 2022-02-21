@@ -26,13 +26,22 @@ export class AppController {
     return this.appService.getHello()
   }
 
-  @Get('/me/')
+  @Get('/me')
   async getUser(@Req() request: Request): Promise<User> {
     const { token } = request.cookies
     if (!token) throw new UnauthorizedException()
     const user = await this.userService.fromToken(token)
     if (!user) throw new UnauthorizedException()
     return user
+  }
+
+  @Get('/contacts')
+  async getContacts(@Req() request: Request) {
+    const { token } = request.cookies
+    if (!token) throw new UnauthorizedException()
+    const user = await this.userService.fromToken(token)
+    if (!user) throw new UnauthorizedException()
+    return this.userService.getContacts(user)
   }
 
   @Post('/register')
@@ -42,7 +51,7 @@ export class AppController {
 
   @Get('/image/:letter')
   getImage(@Param('letter') letter: string) {
-    letter = `${letter}?`.at(0).toUpperCase()
+    letter = (`${letter}?`.at(0) as string).toUpperCase()
     return new StreamableFile(this.appService.getImage(letter), {
       type: 'image/png',
       disposition: '',
