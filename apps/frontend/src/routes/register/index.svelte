@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { session } from '$app/stores'
 
   let name = ''
   let displayName = ''
@@ -40,9 +41,11 @@
       return
     }
 
+    // Prevent client-side redirection to '/register'
+    $session.user = body
     const { token } = body
     document.cookie = `token=${token}; path=/; max-age=31536000`
-    goto('/')
+    await goto('/')
   }
 </script>
 
