@@ -2,17 +2,36 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   Req,
+  Res,
   StreamableFile,
   UnauthorizedException,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { Request } from 'express'
+import { IsString } from 'class-validator'
+import { Request, Response } from 'express'
+import { createReadStream, existsSync } from 'fs'
 import { AppService } from './app.service'
 import { CreateUserDto } from './user/user.dto'
 import { UserService } from './user/user.service'
+
+class GetImageParams {
+  @IsString()
+  name!: string
+
+  @IsString()
+  accept!: string
+}
+
+class GenerateImageParams {
+  @IsString()
+  name!: string
+
+  @IsString()
+  font!: string
+}
 
 @Controller()
 export class AppController {
@@ -49,12 +68,31 @@ export class AppController {
     return this.userService.register(createUserDto)
   }
 
-  @Get('/image/:letter')
-  getImage(@Param('letter') letter: string) {
-    letter = (`${letter}?`.at(0) as string).toUpperCase()
-    return new StreamableFile(this.appService.getImage(letter), {
+  @Get('/image')
+  getImage(
+    @Query() { name, accept }: GetImageParams,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    for (const extension of accept.split(',')) {
+      const filename = `${__dirname}/../../../storage/profile-pictures/${name}.${extension}`
+      if (existsSync(filename))
+        return new StreamableFile(createReadStream(filename), {
+          type: `image/${extension}`,
+        })
+    }
+    response.redirect(
+      `./image-generator?${new URLSearchParams({
+        name,
+        font: 'Gilroy-ExtraBold',
+      })}`,
+    )
+    response.end()
+  }
+
+  @Get('/image-generator')
+  generateImage(@Query() { name, font }: GenerateImageParams) {
+    return new StreamableFile(this.appService.getImage(name, font), {
       type: 'image/png',
-      disposition: '',
     })
   }
 }

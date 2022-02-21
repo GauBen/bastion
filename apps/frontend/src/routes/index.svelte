@@ -10,8 +10,9 @@
 
 <script lang="ts">
   export let contacts: {
-    displayName: string
+    id: number
     name: string
+    displayName: string
   }[]
 </script>
 
@@ -21,7 +22,10 @@
       {#each contacts as contact}
         <div class="person">
           <img
-            src="/api/image/{contact.name}"
+            src="/api/image?{new URLSearchParams({
+              name: contact.name,
+              accept: 'png,jpg',
+            })}"
             alt="{contact.displayName} picture"
             width={64}
             height={64}

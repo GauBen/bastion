@@ -7,23 +7,24 @@ export class AppService {
     return 'Hello World!'
   }
 
-  getImage(letter: string): PNGStream {
+  getImage(name: string, font: string): PNGStream {
     try {
-      registerFont(`${__dirname}/../resouces/Gilroy-ExtraBold.ttf`, {
-        family: 'Gilroy',
+      registerFont(`${__dirname}/../resouces/${font}.ttf`, {
+        family: 'font',
       })
     } catch (error: unknown) {
-      throw new BadRequestException(
-        error instanceof Error ? error.stack : 'Unknown error',
-      )
+      throw new BadRequestException(error)
     }
+    const letter = (`${name}?`.at(0) as string).toUpperCase()
+    const hue =
+      [...name].reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0) % 360
     const canvas = createCanvas(64, 64)
     const ctx = canvas.getContext('2d')
-    ctx.fillStyle = '#C1DDD7'
+    ctx.fillStyle = `hsla(${hue}, 29%, 81%, 1)`
     ctx.fillRect(0, 0, 64, 64)
-    ctx.font = '44px Gilroy'
+    ctx.font = '44px font'
     const box = ctx.measureText(letter)
-    ctx.fillStyle = '#889c98'
+    ctx.fillStyle = `hsla(${hue}, 29%, 30%, 1)`
     ctx.fillText(letter, 32 - box.width / 2, 48)
     return canvas.createPNGStream()
   }
