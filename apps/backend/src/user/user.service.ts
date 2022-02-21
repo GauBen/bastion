@@ -13,15 +13,22 @@ export class UserService {
   }
 
   async getContacts(user: User) {
-    return this.prismaService.user.findMany({
-      where: {
-        OR: [
-          { messagesReceived: { some: { from: user } } },
-          { messagesSent: { some: { to: user } } },
-        ],
-      },
-      select: { id: true, name: true, displayName: true },
-    })
+    // This query is too complex to be written with Prisma API
+    return this.prismaService.$queryRaw`
+      SELECT id, name, displayName
+      -- Get users who sent and received messages to 'user'
+      FROM (
+        -- 'user' is the recipient
+        SELECT * FROM User
+        INNER JOIN (SELECT toId, MAX(id) AS last FROM Message WHERE fromId = ${user.id} GROUP BY toId) t ON User.id = t.toId
+        UNION
+        -- 'user' is the issuer
+        SELECT * FROM User
+        INNER JOIN (SELECT fromId, MAX(id) AS last FROM Message WHERE toId = ${user.id} GROUP BY fromId) t ON User.id = t.fromId
+      ) t
+      -- Order them by last message first
+      ORDER BY last DESC
+    `
   }
 
   async register({ name, displayName }: CreateUserDto): Promise<User> {
