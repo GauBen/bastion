@@ -9,7 +9,7 @@
   }
 
   const toSentence = (str: string) =>
-    str.at(0).toUpperCase() + str.slice(1) + '.'
+    (str.at(0) ?? '').toUpperCase() + str.slice(1) + '.'
 
   const submit = async () => {
     const response = await fetch('/api/register', {

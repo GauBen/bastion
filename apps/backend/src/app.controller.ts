@@ -4,9 +4,12 @@ import {
   Get,
   Param,
   Post,
+  Req,
   StreamableFile,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
+import { Request } from 'express'
 import { AppService } from './app.service'
 import { CreateUserDto } from './user/user.dto'
 import { UserService } from './user/user.service'
@@ -23,9 +26,13 @@ export class AppController {
     return this.appService.getHello()
   }
 
-  @Get('/user/:token')
-  async getUser(@Param('token') token: string): Promise<User | null> {
-    return this.userService.fromToken(token)
+  @Get('/me/')
+  async getUser(@Req() request: Request): Promise<User> {
+    const { token } = request.cookies
+    if (!token) throw new UnauthorizedException()
+    const user = await this.userService.fromToken(token)
+    if (!user) throw new UnauthorizedException()
+    return user
   }
 
   @Post('/register')
