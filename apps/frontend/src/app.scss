@@ -2,3 +2,7 @@
 @import 'sanitize.css/forms.css';
 @import 'sanitize.css/assets.css';
 @import 'sanitize.css/typography.css';
+
+#app {
+  min-height: 100vh;
+}

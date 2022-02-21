@@ -14,10 +14,12 @@
   export let title: string
 </script>
 
-<h1>{title}</h1>
+<main>
+  <h1>{title}</h1>
+</main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     align-items: center;
     justify-content: center;

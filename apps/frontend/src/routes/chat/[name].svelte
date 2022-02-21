@@ -19,37 +19,39 @@
   let value = ''
 </script>
 
-<Header>{$page.params.name}</Header>
-<div class="messages">
-  {#each messages as { me, body }}
-    <div class="message" class:me>
-      {body}
-    </div>
-  {/each}
-</div>
-<form
-  on:submit|preventDefault={() => {
-    messages = [...messages, { me: true, body: value }]
-    value = ''
-  }}
->
-  <input type="text" required bind:value />
-  <button>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z"
-      />
-    </svg>
-  </button>
-</form>
+<main>
+  <Header>{$page.params.name}</Header>
+  <div class="messages">
+    {#each messages as { me, body }}
+      <div class="message" class:me>
+        {body}
+      </div>
+    {/each}
+  </div>
+  <form
+    on:submit|preventDefault={() => {
+      messages = [...messages, { me: true, body: value }]
+      value = ''
+    }}
+  >
+    <input type="text" required bind:value />
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z"
+        />
+      </svg>
+    </button>
+  </form>
+</main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     flex-direction: column;
     min-height: 100vh;

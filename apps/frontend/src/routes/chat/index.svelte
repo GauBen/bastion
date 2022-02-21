@@ -10,19 +10,21 @@
   })
 </script>
 
-<Header>New conversation</Header>
-<form action="">
-  <p>
-    <label>To <input type="text" /></label>
-  </p>
-  <p class="center">
-    <button>Open conversation</button>
-  </p>
-</form>
-<Nav />
+<main>
+  <Header>New conversation</Header>
+  <form action="">
+    <p>
+      <label>To <input type="text" /></label>
+    </p>
+    <p class="center">
+      <button>Open conversation</button>
+    </p>
+  </form>
+  <Nav />
+</main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     flex-direction: column;
     height: 100vh;

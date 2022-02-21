@@ -10,22 +10,24 @@
   })
 </script>
 
-<Header>Settings</Header>
-<form on:submit|preventDefault>
-  <p>
-    <label>Display name<br /><input type="text" /></label>
-  </p>
-  <p>
-    <label>Profile picture<br /><input type="file" /></label>
-  </p>
-  <p class="center">
-    <button>Save</button>
-  </p>
-</form>
-<Nav />
+<main>
+  <Header>Settings</Header>
+  <form on:submit|preventDefault>
+    <p>
+      <label>Display name<br /><input type="text" /></label>
+    </p>
+    <p>
+      <label>Profile picture<br /><input type="file" /></label>
+    </p>
+    <p class="center">
+      <button>Save</button>
+    </p>
+  </form>
+  <Nav />
+</main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     flex-direction: column;
     height: 100vh;

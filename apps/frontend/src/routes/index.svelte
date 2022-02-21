@@ -15,29 +15,31 @@
   }[]
 </script>
 
-<div class="people">
-  <div class="shadow">
-    {#each contacts as contact}
-      <div class="person">
-        <img
-          src="/api/image/{contact.name}"
-          alt="{contact.displayName} picture"
-          width={64}
-          height={64}
-        />
-        <a class="display-name" href="/chat/{contact.name}">
-          {contact.displayName}
-        </a>
-        <span class="user-name">{contact.name}</span>
-      </div>
-    {/each}
+<main>
+  <div class="people">
+    <div class="shadow">
+      {#each contacts as contact}
+        <div class="person">
+          <img
+            src="/api/image/{contact.name}"
+            alt="{contact.displayName} picture"
+            width={64}
+            height={64}
+          />
+          <a class="display-name" href="/chat/{contact.name}">
+            {contact.displayName}
+          </a>
+          <span class="user-name">{contact.name}</span>
+        </div>
+      {/each}
+    </div>
   </div>
-</div>
 
-<Nav />
+  <Nav />
+</main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     flex-direction: column;
     height: 100vh;
