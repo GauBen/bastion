@@ -1,0 +1,10 @@
+version: '3'
+services:
+  challenge:
+    build: .
+    ports:
+      - '3000:3000'
+    # volumes:
+    #   - './storage:/app/storage'
+    # command: ./start.sh
+    # restart: unless-stopped
