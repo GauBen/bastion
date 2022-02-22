@@ -3,11 +3,14 @@
   import Nav from '$lib/Nav.svelte'
   import type { Load } from '@sveltejs/kit'
 
-  export const load: Load = () => ({
-    stuff: {
-      title: 'Settings',
-    },
-  })
+  export const load: Load = ({ session }) =>
+    session.user
+      ? {
+          stuff: {
+            title: 'Settings',
+          },
+        }
+      : { status: 307, redirect: '/register' }
 </script>
 
 <main>

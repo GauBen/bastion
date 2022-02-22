@@ -3,11 +3,14 @@
   import Header from '$lib/Header.svelte'
   import type { Load } from '@sveltejs/kit'
 
-  export const load: Load = () => ({
-    stuff: {
-      title: 'Conversation',
-    },
-  })
+  export const load: Load = ({ session }) =>
+    session.user
+      ? {
+          stuff: {
+            title: 'Conversation',
+          },
+        }
+      : { status: 307, redirect: '/register' }
 </script>
 
 <script lang="ts">

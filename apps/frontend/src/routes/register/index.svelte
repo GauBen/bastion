@@ -1,7 +1,15 @@
-<script lang="ts">
+<script lang="ts" context="module">
   import { goto } from '$app/navigation'
   import { session } from '$app/stores'
+  import type { Load } from '@sveltejs/kit'
 
+  export const load: Load = ({ session }) =>
+    session.user
+      ? { redirect: '/', status: 307 }
+      : { stuff: { title: 'Register' } }
+</script>
+
+<script lang="ts">
   let name = ''
   let displayName = ''
   let errors: { [x: string]: string[] } = {
@@ -75,7 +83,7 @@
 </main>
 
 <style lang="scss">
-  :global(#app) {
+  main {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,7 +91,7 @@
     background-color: $background;
   }
 
-  main {
+  form {
     padding: 1em 2em;
     background-color: $light-background;
     border-radius: 1em;
