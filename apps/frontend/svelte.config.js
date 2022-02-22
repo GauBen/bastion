@@ -30,10 +30,7 @@ const config = {
       },
       server: {
         proxy: {
-          '/api': {
-            target: `http://localhost:${port}`,
-            rewrite: (path) => path.replace(/^\/api/, ''),
-          },
+          '/api': { target: `http://localhost:${port}` },
         },
       },
     },

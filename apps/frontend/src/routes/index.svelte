@@ -13,7 +13,7 @@
     id: number
     name: string
     displayName: string
-  }[]
+  }[] = []
 </script>
 
 <main>

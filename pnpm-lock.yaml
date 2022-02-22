@@ -4,15 +4,11 @@ importers:
 
   .:
     specifiers:
-      '@nestjs/core': ^8.3.0
       '@prisma/client': ^3.9.2
-      express: ^4.17.3
       nanoid: ^3.3.1
       prisma: ^3.9.2
     dependencies:
-      '@nestjs/core': 8.3.0
       '@prisma/client': 3.9.2_prisma@3.9.2
-      express: 4.17.3
       nanoid: 3.3.1
       prisma: 3.9.2
 
@@ -94,7 +90,7 @@ importers:
   apps/frontend:
     specifiers:
       '@sveltejs/adapter-node': ^1.0.0-next.68
-      '@sveltejs/kit': next
+      '@sveltejs/kit': 1.0.0-next.278
       '@types/cookie': ^0.4.1
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
@@ -953,35 +949,6 @@ packages:
       uuid: 8.3.2
     transitivePeerDependencies:
       - debug
-    dev: false
-
-  /@nestjs/core/8.3.0:
-    resolution: {integrity: sha512-C6m0hBIKg+xRcZYFDAGkMkZt1izQ7S42LYRyZPoWMO7/tEtW+yEPaUQtqG9CxxeG0wHjgzZ17iNeuxse4KfeIA==}
-    requiresBuild: true
-    peerDependencies:
-      '@nestjs/common': ^8.0.0
-      '@nestjs/microservices': ^8.0.0
-      '@nestjs/platform-express': ^8.0.0
-      '@nestjs/websockets': ^8.0.0
-      reflect-metadata: ^0.1.12
-      rxjs: ^7.1.0
-    peerDependenciesMeta:
-      '@nestjs/microservices':
-        optional: true
-      '@nestjs/platform-express':
-        optional: true
-      '@nestjs/websockets':
-        optional: true
-    dependencies:
-      '@nuxtjs/opencollective': 0.3.2
-      fast-safe-stringify: 2.1.1
-      iterare: 1.2.1
-      object-hash: 2.2.0
-      path-to-regexp: 3.2.0
-      tslib: 2.3.1
-      uuid: 8.3.2
-    transitivePeerDependencies:
-      - encoding
     dev: false
 
   /@nestjs/core/8.3.0_da0e0651429c7d3361d04d1439021adb:
@@ -2077,22 +2044,6 @@ packages:
       type-is: 1.6.18
     dev: false
 
-  /body-parser/1.19.2:
-    resolution: {integrity: sha512-SAAwOxgoCKMGs9uUAUFHygfLAyaniaoun6I8mFY9pRAJL9+Kec34aU+oIjDhTycub1jozEfEwx1W1IuOYxVSFw==}
-    engines: {node: '>= 0.8'}
-    dependencies:
-      bytes: 3.1.2
-      content-type: 1.0.4
-      debug: 2.6.9
-      depd: 1.1.2
-      http-errors: 1.8.1
-      iconv-lite: 0.4.24
-      on-finished: 2.3.0
-      qs: 6.9.7
-      raw-body: 2.4.3
-      type-is: 1.6.18
-    dev: false
-
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -2159,11 +2110,6 @@ packages:
 
   /bytes/3.1.1:
     resolution: {integrity: sha512-dWe4nWO/ruEOY7HkUJ5gFt1DCFV9zPRoJr8pV0/ASQermOZjtq8jMjOprC0Kd10GLN+l7xaUPvxzJFWtxGu8Fg==}
-    engines: {node: '>= 0.8'}
-    dev: false
-
-  /bytes/3.1.2:
-    resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
     dev: false
 
@@ -2441,6 +2387,7 @@ packages:
   /cookie/0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
     engines: {node: '>= 0.6'}
+    dev: true
 
   /cookiejar/2.1.3:
     resolution: {integrity: sha512-JxbCBUdrfr6AQjOXrxoTvAMJO4HBTUIlBzslcJPAz+/KT8yk53fXun51u+RenNYvad/+Vc2DIz5o9UxlCDymFQ==}
@@ -3263,42 +3210,6 @@ packages:
       path-to-regexp: 0.1.7
       proxy-addr: 2.0.7
       qs: 6.9.6
-      range-parser: 1.2.1
-      safe-buffer: 5.2.1
-      send: 0.17.2
-      serve-static: 1.14.2
-      setprototypeof: 1.2.0
-      statuses: 1.5.0
-      type-is: 1.6.18
-      utils-merge: 1.0.1
-      vary: 1.1.2
-    dev: false
-
-  /express/4.17.3:
-    resolution: {integrity: sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg==}
-    engines: {node: '>= 0.10.0'}
-    dependencies:
-      accepts: 1.3.8
-      array-flatten: 1.1.1
-      body-parser: 1.19.2
-      content-disposition: 0.5.4
-      content-type: 1.0.4
-      cookie: 0.4.2
-      cookie-signature: 1.0.6
-      debug: 2.6.9
-      depd: 1.1.2
-      encodeurl: 1.0.2
-      escape-html: 1.0.3
-      etag: 1.8.1
-      finalhandler: 1.1.2
-      fresh: 0.5.2
-      merge-descriptors: 1.0.1
-      methods: 1.1.2
-      on-finished: 2.3.0
-      parseurl: 1.3.3
-      path-to-regexp: 0.1.7
-      proxy-addr: 2.0.7
-      qs: 6.9.7
       range-parser: 1.2.1
       safe-buffer: 5.2.1
       send: 0.17.2
@@ -5194,11 +5105,6 @@ packages:
     engines: {node: '>=0.6'}
     dev: false
 
-  /qs/6.9.7:
-    resolution: {integrity: sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==}
-    engines: {node: '>=0.6'}
-    dev: false
-
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
@@ -5219,16 +5125,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       bytes: 3.1.1
-      http-errors: 1.8.1
-      iconv-lite: 0.4.24
-      unpipe: 1.0.0
-    dev: false
-
-  /raw-body/2.4.3:
-    resolution: {integrity: sha512-UlTNLIcu0uzb4D2f4WltY6cVjLi+/jEN4lgEUj3E04tpMDpUlkBo/eSn6zou9hum2VMNpCCUone0O0WeJim07g==}
-    engines: {node: '>= 0.8'}
-    dependencies:
-      bytes: 3.1.2
       http-errors: 1.8.1
       iconv-lite: 0.4.24
       unpipe: 1.0.0

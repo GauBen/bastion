@@ -33,7 +33,7 @@ class GenerateImageParams {
   font!: string
 }
 
-@Controller()
+@Controller('/api')
 export class AppController {
   constructor(
     private readonly appService: AppService,
