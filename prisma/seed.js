@@ -2,7 +2,7 @@ import pkg from '@prisma/client'
 const { PrismaClient } = pkg
 import { nanoid } from 'nanoid'
 
-const seed = async () =>
+const seed = async (prisma) =>
   prisma.user.create({
     data: {
       name: 'bastion',
