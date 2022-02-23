@@ -10,4 +10,5 @@ export const bootstrap = async () => {
   return app
 }
 
-if (require.main === module) bootstrap().then(async (app) => app.listen(3000))
+if (require.main === module)
+  bootstrap().then(async (app) => app.listen(Number(process.env.VITE_API_PORT)))

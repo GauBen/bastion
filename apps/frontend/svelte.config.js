@@ -1,9 +1,9 @@
 import adapter from '@sveltejs/adapter-node'
-import 'dotenv/config'
+import { config as dotenv } from 'dotenv'
 import preprocess from 'svelte-preprocess'
 
 const __dirname = new URL('.', import.meta.url).pathname
-const port = Number(process.env.VITE_API_PORT || 3000)
+dotenv({ path: `${__dirname}/../../.env` })
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -30,7 +30,9 @@ const config = {
       },
       server: {
         proxy: {
-          '/api': { target: `http://localhost:${port}` },
+          '/api': {
+            target: `http://localhost:${process.env.VITE_API_PORT}`,
+          },
         },
       },
     },

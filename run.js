@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { bootstrap } from './apps/backend/dist/main.js'
 import { handler as frontend } from './apps/frontend/build/handler.js'
 
@@ -7,7 +8,7 @@ const run = async () => {
   server.getHttpAdapter().setNotFoundHandler = undefined
   await server.init()
   server.use(frontend)
-  server.listen(3000)
+  server.listen(Number(process.env.VITE_API_PORT))
 }
 
 run()

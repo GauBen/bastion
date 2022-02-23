@@ -5,10 +5,12 @@ importers:
   .:
     specifiers:
       '@prisma/client': ^3.9.2
+      dotenv: ^16.0.0
       nanoid: ^3.3.1
       prisma: ^3.9.2
     dependencies:
       '@prisma/client': 3.9.2_prisma@3.9.2
+      dotenv: 16.0.0
       nanoid: 3.3.1
       prisma: 3.9.2
 
@@ -2583,7 +2585,6 @@ packages:
   /dotenv/16.0.0:
     resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
     engines: {node: '>=12'}
-    dev: true
 
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
