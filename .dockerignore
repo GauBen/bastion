@@ -1,0 +1,8 @@
+.*
+**/node_modules/
+Dockerfile
+docker-compose.yml
+LICENSE
+REAME.md
+storage/
+!storage/profile-pictures/bastion.png
