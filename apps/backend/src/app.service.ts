@@ -9,7 +9,7 @@ export class AppService {
 
   getImage(name: string, font: string): PNGStream {
     try {
-      registerFont(`${__dirname}/../resouces/${font}.ttf`, {
+      registerFont(`${__dirname}/../resources/${font}.ttf`, {
         family: 'font',
       })
     } catch (error: unknown) {
