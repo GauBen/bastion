@@ -15,7 +15,7 @@
   <main>
     <h1>Please use Bastion on your phone.</h1>
     <h2>
-      The desktop version is currenlty in
+      The desktop version is currently in
       pre-alpha-insider-limited-turbo-private phase.
     </h2>
   </main>
