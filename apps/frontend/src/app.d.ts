@@ -8,12 +8,14 @@ import type { User } from '@prisma/client'
 global {
   declare namespace App {
     interface Locals {
+      mobile: boolean
       user: User | null
     }
 
     interface Platform {}
 
     interface Session {
+      mobile: boolean
       user: User | null
     }
 
