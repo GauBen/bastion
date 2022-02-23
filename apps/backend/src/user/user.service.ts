@@ -1,5 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
-import { User } from '@prisma/client'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
+import { Message, User } from '@prisma/client'
 import { PrismaService } from '../prisma.service'
 import { nanoid } from 'nanoid'
 import { CreateUserDto } from './user.dto'
@@ -14,7 +18,9 @@ export class UserService {
 
   async getContacts(user: User) {
     // This query is too complex to be written with Prisma API
-    return this.prismaService.$queryRaw`
+    return this.prismaService.$queryRaw<
+      Array<{ id: number; name: string; displayName: string }>
+    >`
       SELECT id, name, displayName
       -- Get users who sent and received messages to 'user'
       FROM (
@@ -29,6 +35,27 @@ export class UserService {
       -- Order them by last message first
       ORDER BY last DESC
     `
+  }
+
+  async getChat(user: User, name: string) {
+    const contact = await this.prismaService.user.findUnique({
+      where: { name },
+      select: { id: true, name: true, displayName: true },
+    })
+    if (!contact) throw new NotFoundException()
+    const messages = await this.prismaService.$queryRaw<
+      Message & { me: boolean }
+    >`
+      SELECT id, fromId, toId, gif, body, me
+      FROM (
+        SELECT id, fromId, toId, gif, body, true AS me FROM Message WHERE fromId = ${user.id} AND toId = ${contact.id}
+        UNION
+        SELECT id, fromId, toId, gif, body, false AS me FROM Message WHERE fromId = ${contact.id} AND toId = ${user.id}
+      ) t
+      -- Order them by first message first
+      ORDER BY id ASC
+    `
+    return { contact, messages }
   }
 
   async register({ name, displayName }: CreateUserDto): Promise<User> {

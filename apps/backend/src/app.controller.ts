@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -56,11 +57,14 @@ export class AppController {
 
   @Get('/contacts')
   async getContacts(@Req() request: Request) {
-    const { token } = request.cookies
-    if (!token) throw new UnauthorizedException()
-    const user = await this.userService.fromToken(token)
-    if (!user) throw new UnauthorizedException()
+    const user = await this.getUser(request)
     return this.userService.getContacts(user)
+  }
+
+  @Get('/chat/:name')
+  async getMessages(@Req() request: Request, @Param('name') name: string) {
+    const user = await this.getUser(request)
+    return this.userService.getChat(user, name)
   }
 
   @Post('/register')

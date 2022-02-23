@@ -1,29 +1,24 @@
 <script lang="ts" context="module">
-  import { page } from '$app/stores'
   import Header from '$lib/Header.svelte'
   import type { Load } from '@sveltejs/kit'
 
-  export const load: Load = ({ session }) =>
-    session.user
-      ? {
-          stuff: {
-            title: 'Conversation',
-          },
-        }
-      : { status: 307, redirect: '/register' }
+  export const load: Load = ({ props }) => ({
+    props,
+    stuff: {
+      title: `Conversation with ${props.contact.displayName}`,
+    },
+  })
 </script>
 
 <script lang="ts">
-  let messages = [
-    { me: true, body: 'Hello' },
-    { me: false, body: 'Hi!' },
-  ]
+  export let messages: Array<{ body: string; me: boolean }>
+  export let contact: { id: number; name: string; displayName: string }
 
-  let value = ''
+  let value: string
 </script>
 
 <main>
-  <Header>{$page.params.name}</Header>
+  <Header>{contact.displayName}</Header>
   <div class="messages">
     {#each messages as { me, body }}
       <div class="message" class:me>

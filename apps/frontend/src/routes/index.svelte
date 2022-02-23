@@ -2,13 +2,10 @@
   import Nav from '$lib/Nav.svelte'
   import type { Load } from '@sveltejs/kit'
 
-  export const load: Load = ({ props, session }) =>
-    session.user
-      ? {
-          props,
-          stuff: { title: 'Conversations' },
-        }
-      : { status: 307, redirect: '/register' }
+  export const load: Load = ({ props }) => ({
+    props,
+    stuff: { title: 'Conversations' },
+  })
 </script>
 
 <script lang="ts">
