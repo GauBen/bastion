@@ -28,13 +28,12 @@ RUN set -eux; \
 	curl https://get.volta.sh | bash -s -- --skip-setup; \
 	volta install node && volta install corepack
 
-RUN mkdir -p apps/backend/dist apps/frontend/build
-
 COPY --from=build /root/.pnpm-store/v3/ /root/.pnpm-store/v3/
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml /app/run.js ./
 COPY --from=build /app/prisma/ ./prisma/
 COPY --from=build /app/storage/ ./storage/
 COPY --from=build /app/apps/backend/package.json ./apps/backend/
+COPY --from=build /app/apps/backend/resources/ ./apps/backend/resources/
 COPY --from=build /app/apps/backend/dist/ ./apps/backend/dist/
 COPY --from=build /app/apps/frontend/package.json ./apps/frontend/
 COPY --from=build /app/apps/frontend/build/ ./apps/frontend/build/
@@ -46,4 +45,4 @@ RUN pnpm prisma db push && pnpm prisma db seed
 RUN pnpm prune && pnpm store prune
 
 EXPOSE 3000
-CMD [ "node", "run.js" ]
+CMD [ "node", "." ]
