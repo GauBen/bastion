@@ -16,6 +16,13 @@ export class UserService {
     return this.prismaService.user.findUnique({ where: { token } })
   }
 
+  async fromName(name: string) {
+    return this.prismaService.user.findUnique({
+      where: { name },
+      select: { id: true, name: true, displayName: true },
+    })
+  }
+
   async getContacts(user: User) {
     // This query is too complex to be written with Prisma API
     return this.prismaService.$queryRaw<
@@ -38,10 +45,7 @@ export class UserService {
   }
 
   async getChat(user: User, name: string) {
-    const contact = await this.prismaService.user.findUnique({
-      where: { name },
-      select: { id: true, name: true, displayName: true },
-    })
+    const contact = await this.fromName(name)
     if (!contact) throw new NotFoundException()
     const messages = await this.prismaService.$queryRaw<
       Message & { me: boolean }

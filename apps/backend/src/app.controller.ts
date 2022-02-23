@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   Query,
@@ -59,6 +60,13 @@ export class AppController {
   async getContacts(@Req() request: Request) {
     const user = await this.getUser(request)
     return this.userService.getContacts(user)
+  }
+
+  @Get('/user/:name')
+  async getUserFromName(@Param('name') name: string) {
+    const user = await this.userService.fromName(name)
+    if (!user) throw new NotFoundException()
+    return user
   }
 
   @Get('/chat/:name')
