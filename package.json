@@ -15,6 +15,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm run build --recursive",
+    "clean": "pnpm run clean --recursive",
     "dev": "pnpm run dev --recursive",
     "lint": "pnpm run lint --recursive"
   },

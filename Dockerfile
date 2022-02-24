@@ -42,7 +42,7 @@ COPY --from=build /bastion-build/prisma/ ./prisma/
 COPY --from=build /bastion-build/storage/ ./storage/
 COPY --from=build /bastion-build/apps/backend/package.json ./apps/backend/
 COPY --from=build /bastion-build/apps/backend/resources/ ./apps/backend/resources/
-COPY --from=build /bastion-build/apps/backend/dist/ ./apps/backend/dist/
+COPY --from=build /bastion-build/apps/backend/build/ ./apps/backend/build/
 COPY --from=build /bastion-build/apps/frontend/package.json ./apps/frontend/
 COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
 

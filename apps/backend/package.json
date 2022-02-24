@@ -36,6 +36,7 @@
   },
   "scripts": {
     "build": "nest build",
+    "clean": "rm -rf build",
     "dev": "nest start --watch",
     "lint": "eslint src --fix"
   }

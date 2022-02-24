@@ -26,8 +26,9 @@
   },
   "scripts": {
     "build": "svelte-kit build",
+    "clean": "rm -rf build/ .svelte-kit/",
     "dev": "svelte-kit dev --port 8080",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix && svelte-check"
   },
   "type": "module"
 }

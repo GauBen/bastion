@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { bootstrap } from './apps/backend/dist/main.js'
+import { bootstrap } from './apps/backend/build/main.js'
 import { handler as frontend } from './apps/frontend/build/handler.js'
 
 const run = async () => {
