@@ -1,7 +1,15 @@
+# This image is created with a multi-stage build:
+# - build: produces the runnable server code
+# - runtime: starts a database server and the server code
+
+# Build stage
 FROM debian:bullseye-slim AS build
+WORKDIR /bastion-build
 
-WORKDIR /app
+# Copy the whole monorepo
+COPY . .
 
+# Install Volta
 ENV VOLTA_HOME=/root/.volta
 ENV PATH=$VOLTA_HOME/bin:$PATH
 RUN set -eux; \
@@ -9,18 +17,19 @@ RUN set -eux; \
 	curl https://get.volta.sh | bash -s -- --skip-setup; \
 	volta install node && volta install corepack
 
-COPY . .
-
+# Install dependencies and build the whole monorepo
 ENV VITE_API_PORT=3000
 RUN pnpm install
 RUN pnpm build
 
-# ------------------------
-
+# Runtime stage
 FROM debian:bullseye-slim AS runtime
+WORKDIR /bastion-server-runtime
 
-WORKDIR /app/bastion-runtime
+# Copy workspace files
+COPY --from=build /bastion-build/package.json /bastion-build/pnpm-lock.yaml /bastion-build/pnpm-workspace.yaml /bastion-build/run.js ./
 
+# Install Volta
 ENV VOLTA_HOME=/root/.volta
 ENV PATH=$VOLTA_HOME/bin:$PATH
 RUN set -eux; \
@@ -28,21 +37,27 @@ RUN set -eux; \
 	curl https://get.volta.sh | bash -s -- --skip-setup; \
 	volta install node && volta install corepack
 
-COPY --from=build /root/.pnpm-store/v3/ /root/.pnpm-store/v3/
-COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml /app/run.js ./
-COPY --from=build /app/prisma/ ./prisma/
-COPY --from=build /app/storage/ ./storage/
-COPY --from=build /app/apps/backend/package.json ./apps/backend/
-COPY --from=build /app/apps/backend/resources/ ./apps/backend/resources/
-COPY --from=build /app/apps/backend/dist/ ./apps/backend/dist/
-COPY --from=build /app/apps/frontend/package.json ./apps/frontend/
-COPY --from=build /app/apps/frontend/build/ ./apps/frontend/build/
+# Not copying pnpm's store produces a smaller image
+# COPY --from=build /root/.pnpm-store/v3/ /root/.pnpm-store/v3/
 
-ENV DATABASE_URL="file:../storage/dev.db"
-ENV VITE_API_PORT=3000
+# Copy build artifacts
+COPY --from=build /bastion-build/prisma/ ./prisma/
+COPY --from=build /bastion-build/storage/ ./storage/
+COPY --from=build /bastion-build/apps/backend/package.json ./apps/backend/
+COPY --from=build /bastion-build/apps/backend/resources/ ./apps/backend/resources/
+COPY --from=build /bastion-build/apps/backend/dist/ ./apps/backend/dist/
+COPY --from=build /bastion-build/apps/frontend/package.json ./apps/frontend/
+COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
+
+# Install dependencies and prune pnpm's store
 RUN pnpm install --prod
-RUN pnpm prisma db push && pnpm prisma db seed
 RUN pnpm prune && pnpm store prune
 
+# Prepare the SQLite database
+ENV DATABASE_URL="file:../storage/dev.db"
+ENV VITE_API_PORT=3000
+RUN pnpm prisma db push && pnpm prisma db seed
+
+# Start the application on port 3000
 EXPOSE 3000
 CMD [ "node", "." ]
