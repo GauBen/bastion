@@ -1,10 +1,8 @@
 version: '3'
 services:
-  challenge:
-    build: .
+  postgres:
+    image: postgres:14
     ports:
-      - '3000:3000'
-    # volumes:
-    #   - './storage:/app/storage'
-    # command: ./start.sh
-    # restart: unless-stopped
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust

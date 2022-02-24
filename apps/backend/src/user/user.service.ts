@@ -28,16 +28,16 @@ export class UserService {
     return this.prismaService.$queryRaw<
       Array<{ id: number; name: string; displayName: string }>
     >`
-      SELECT id, name, displayName
+      SELECT id, name, "displayName"
       -- Get users who sent and received messages to 'user'
       FROM (
         -- 'user' is the recipient
-        SELECT * FROM User
-        INNER JOIN (SELECT toId, MAX(id) AS last FROM Message WHERE fromId = ${user.id} GROUP BY toId) t ON User.id = t.toId
+        SELECT * FROM "User"
+        INNER JOIN (SELECT "toId", MAX(id) AS last FROM "Message" WHERE "fromId" = ${user.id} GROUP BY "toId") t ON "User".id = t."toId"
         UNION
         -- 'user' is the issuer
-        SELECT * FROM User
-        INNER JOIN (SELECT fromId, MAX(id) AS last FROM Message WHERE toId = ${user.id} GROUP BY fromId) t ON User.id = t.fromId
+        SELECT * FROM "User"
+        INNER JOIN (SELECT "fromId", MAX(id) AS last FROM "Message" WHERE "toId" = ${user.id} GROUP BY "fromId") t ON "User".id = t."fromId"
       ) t
       -- Order them by last message first
       ORDER BY last DESC
@@ -50,11 +50,11 @@ export class UserService {
     const messages = await this.prismaService.$queryRaw<
       Message & { me: boolean }
     >`
-      SELECT id, fromId, toId, gif, body, me
+      SELECT id, "fromId", "toId", gif, body, me
       FROM (
-        SELECT id, fromId, toId, gif, body, true AS me FROM Message WHERE fromId = ${user.id} AND toId = ${contact.id}
+        SELECT id, "fromId", "toId", gif, body, true AS me FROM "Message" WHERE "fromId" = ${user.id} AND "toId" = ${contact.id}
         UNION
-        SELECT id, fromId, toId, gif, body, false AS me FROM Message WHERE fromId = ${contact.id} AND toId = ${user.id}
+        SELECT id, "fromId", "toId", gif, body, false AS me FROM "Message" WHERE "fromId" = ${contact.id} AND "toId" = ${user.id}
       ) t
       -- Order them by first message first
       ORDER BY id ASC
