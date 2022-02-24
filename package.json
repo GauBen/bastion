@@ -1,7 +1,6 @@
 {
   "name": "bastion",
-  "description": "👀",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "dependencies": {
     "@prisma/client": "^3.9.2",
     "dotenv": "^16.0.0",
@@ -14,13 +13,10 @@
     "seed": "node prisma/seed.js"
   },
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GauBen/bastion.git"
-  },
   "scripts": {
     "build": "pnpm run build --recursive",
-    "dev": "pnpm run dev --recursive"
+    "dev": "pnpm run dev --recursive",
+    "lint": "pnpm run lint --recursive"
   },
   "type": "module",
   "volta": {

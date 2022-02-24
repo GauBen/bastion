@@ -29,13 +29,10 @@ WORKDIR /bastion-server-runtime
 # Copy workspace files
 COPY --from=build /bastion-build/package.json /bastion-build/pnpm-lock.yaml /bastion-build/pnpm-workspace.yaml /bastion-build/run.js ./
 
-# Install Volta
+# Copy Volta
 ENV VOLTA_HOME=/root/.volta
 ENV PATH=$VOLTA_HOME/bin:$PATH
-RUN set -eux; \
-	apt-get update && apt-get install -y curl; \
-	curl https://get.volta.sh | bash -s -- --skip-setup; \
-	volta install node && volta install corepack
+COPY --from=build /root/.volta/ /root/.volta/
 
 # Not copying pnpm's store produces a smaller image
 # COPY --from=build /root/.pnpm-store/v3/ /root/.pnpm-store/v3/

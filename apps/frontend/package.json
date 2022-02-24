@@ -26,13 +26,8 @@
   },
   "scripts": {
     "build": "svelte-kit build",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "dev": "svelte-kit dev --port 8080",
-    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
-    "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "package": "svelte-kit package",
-    "preview": "svelte-kit preview"
+    "lint": "eslint src --fix"
   },
   "type": "module"
 }

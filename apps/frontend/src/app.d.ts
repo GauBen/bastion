@@ -12,6 +12,7 @@ global {
       user: User | null
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface Platform {}
 
     interface Session {
