@@ -6,6 +6,11 @@ import type { User } from '@prisma/client'
 // See https://kit.svelte.dev/docs/typescript
 // for information about these interfaces
 global {
+  import type { Socket } from 'socket.io-client'
+  interface Window {
+    socketClient: Socket | undefined
+  }
+
   declare namespace App {
     interface Locals {
       mobile: boolean

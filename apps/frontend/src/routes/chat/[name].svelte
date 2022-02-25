@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import Header from '$lib/Header.svelte'
+  import { io, Socket } from '$lib/io'
   import type { Load } from '@sveltejs/kit'
-  import { io, Socket } from 'socket.io-client'
   import { onMount } from 'svelte'
 
   export const load: Load = ({ props }) => ({
@@ -20,7 +20,7 @@
   let client: Socket
 
   onMount(() => {
-    client = io({ path: '/api/socket.io' })
+    client = io()
 
     client.on('message', (message) => {
       messages = [...messages, message]
