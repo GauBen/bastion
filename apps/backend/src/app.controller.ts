@@ -16,6 +16,7 @@ import { IsString } from 'class-validator'
 import { Request, Response } from 'express'
 import { createReadStream, existsSync } from 'fs'
 import { AppService } from './app.service'
+import { MessageService } from './message/message.service'
 import { CreateUserDto } from './user/user.dto'
 import { UserService } from './user/user.service'
 
@@ -39,6 +40,7 @@ class GenerateImageParams {
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private readonly messageService: MessageService,
     private readonly userService: UserService,
   ) {}
 
@@ -72,7 +74,7 @@ export class AppController {
   @Get('/chat/:name')
   async getMessages(@Req() request: Request, @Param('name') name: string) {
     const user = await this.getUser(request)
-    return this.userService.getChat(user, name)
+    return this.messageService.getChat(user, name)
   }
 
   @Post('/register')

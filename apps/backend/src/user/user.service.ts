@@ -1,11 +1,7 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
-import { Message, User } from '@prisma/client'
-import { PrismaService } from '../prisma.service'
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { User } from '@prisma/client'
 import { nanoid } from 'nanoid'
+import { PrismaService } from '../prisma.service'
 import { CreateUserDto } from './user.dto'
 
 @Injectable()
@@ -43,24 +39,6 @@ export class UserService {
       GROUP BY id
       ORDER BY MAX(last) DESC
     `
-  }
-
-  async getChat(user: User, name: string) {
-    const contact = await this.fromName(name)
-    if (!contact) throw new NotFoundException()
-    const messages = await this.prismaService.$queryRaw<
-      Message & { me: boolean }
-    >`
-      SELECT id, "fromId", "toId", gif, body, me
-      FROM (
-        SELECT id, "fromId", "toId", gif, body, true AS me FROM "Message" WHERE "fromId" = ${user.id} AND "toId" = ${contact.id}
-        UNION
-        SELECT id, "fromId", "toId", gif, body, false AS me FROM "Message" WHERE "fromId" = ${contact.id} AND "toId" = ${user.id}
-      ) t
-      -- Order them by first message first
-      ORDER BY id ASC
-    `
-    return { contact, messages }
   }
 
   async register({ name, displayName }: CreateUserDto): Promise<User> {

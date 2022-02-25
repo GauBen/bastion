@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
   import Header from '$lib/Header.svelte'
   import type { Load } from '@sveltejs/kit'
+  import { io, Socket } from 'socket.io-client'
+  import { onMount } from 'svelte'
 
   export const load: Load = ({ props }) => ({
     props,
@@ -15,6 +17,15 @@
   export let contact: { id: number; name: string; displayName: string }
 
   let value: string
+  let client: Socket
+
+  onMount(() => {
+    client = io({ path: '/api/socket.io' })
+
+    client.on('message', (message) => {
+      messages = [...messages, message]
+    })
+  })
 </script>
 
 <main>
@@ -28,7 +39,7 @@
   </div>
   <form
     on:submit|preventDefault={() => {
-      messages = [...messages, { me: true, body: value }]
+      client.emit('message', { to: contact.id, body: value })
       value = ''
     }}
   >
@@ -52,7 +63,7 @@
   main {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
     background-color: $background;
   }
 
@@ -84,6 +95,7 @@
     flex-direction: column;
     gap: 0.5em;
     padding: 0.5em;
+    overflow: auto;
   }
 
   .message {
