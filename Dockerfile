@@ -27,7 +27,7 @@ FROM debian:bullseye-slim AS runtime
 WORKDIR /bastion-server-runtime
 
 # Prepare PostreSQL
-# Copied from https://github.com/docker-library/postgres/blob/a1ea032a8b5872e291f5f3f7b8395b8e958aaefb/14/bullseye/Dockerfile
+# Adapated from https://github.com/docker-library/postgres/blob/a1ea032a8b5872e291f5f3f7b8395b8e958aaefb/14/bullseye/Dockerfile
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
 		apt-get update; \
