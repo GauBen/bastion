@@ -19,7 +19,7 @@ RUN set -eux; \
 
 # Install dependencies and build the whole monorepo
 ENV VITE_API_PORT=3000
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
 # Runtime stage
@@ -172,7 +172,7 @@ COPY --from=build /bastion-build/apps/frontend/package.json ./apps/frontend/
 COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
 
 # Install dependencies and prune pnpm's store
-RUN pnpm install --prod
+RUN pnpm install --prod --frozen-lockfile
 RUN pnpm prune && pnpm store prune
 
 # Start the application on port 3000
