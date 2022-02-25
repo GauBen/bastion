@@ -2,10 +2,20 @@
 
 👀
 
-Peut être nécessaire de faire la commande suivante avant de lancer le projet : `pnpm install`
-Lancer le projet en mode développeur : `pnpm run dev`
-Build le projet pour faire une version de production : `pnpm run build`
+## Developement mode
 
-Backend est sur le port `3000`
-Frontend est sur le port `8080`
-Lien pour aller sur l'application web : http://127.0.0.1:3000/
+- Clone the repository
+- Install [Volta](https://volta.sh) and [Docker](https://www.docker.com/get-started)
+- Run `./dev.sh`
+
+## Production mode
+
+The whole project is designed to run in a single container:
+
+```bash
+# Create a docker image
+docker build . --tag bastion:latest
+
+# Start the container
+docker run -it -p 3000:3000 bastion:latest
+```
