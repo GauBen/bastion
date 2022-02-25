@@ -39,7 +39,7 @@
   </div>
   <form
     on:submit|preventDefault={() => {
-      client.emit('message', { to: contact.id, body: value })
+      client.emit('message', { toId: contact.id, body: value })
       value = ''
     }}
   >

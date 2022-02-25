@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException, UsePipes, ValidationPipe } from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
@@ -6,10 +6,12 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WsException,
 } from '@nestjs/websockets'
 import * as cookieParser from 'cookie-parser'
 import { Server, Socket } from 'socket.io'
 import { UserService } from '../user/user.service'
+import { CreateMessageDto } from './message.dto'
 import { MessageService } from './message.service'
 
 @WebSocketGateway({
@@ -17,6 +19,15 @@ import { MessageService } from './message.service'
   // Block CORS (Cross-Origin Resource Sharing) in production
   cors: { origin: process.env.NODE_ENV !== 'production' },
 })
+@UsePipes(
+  new ValidationPipe({
+    // ValidationPipe produces BadRequestExceptions by default
+    exceptionFactory: (errors) =>
+      new WsException(
+        errors.flatMap(({ constraints = {} }) => Object.values(constraints)),
+      ),
+  }),
+)
 export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
   constructor(
     private readonly messageService: MessageService,
@@ -45,20 +56,17 @@ export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
 
   @SubscribeMessage('message')
   async handleMessage(
-    @MessageBody() data: { to: number; body: string },
+    @MessageBody() { toId, body }: CreateMessageDto,
     @ConnectedSocket() socket: Socket,
   ) {
     try {
       await this.messageService.createMessage({
         fromId: socket.user.id,
-        toId: data.to,
-        body: data.body,
+        toId,
+        body,
       })
-      socket.emit('message', { body: data.body, me: true })
-      socket.to(`user:${data.to}`).emit('message', {
-        body: data.body,
-        me: false,
-      })
+      socket.emit('message', { body, me: true })
+      socket.to(`user:${toId}`).emit('message', { body, me: false })
     } catch {
       socket.emit('error', 'The message cannot be sent.')
     }
