@@ -13,8 +13,9 @@
   "scripts": {
     "build": "pnpm run build --recursive",
     "clean": "pnpm run clean --recursive",
-    "dev": "pnpm run dev --recursive",
-    "lint": "pnpm run lint --recursive"
+    "dev": "NODE_ENV=development pnpm run dev --recursive",
+    "lint": "pnpm run lint --recursive",
+    "start": "NODE_ENV=production node ."
   },
   "type": "module",
   "volta": {

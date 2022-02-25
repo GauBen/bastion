@@ -5,6 +5,8 @@
     "@nestjs/common": "^8.3.1",
     "@nestjs/core": "^8.3.1",
     "@nestjs/platform-express": "^8.3.1",
+    "@nestjs/platform-socket.io": "^8.3.1",
+    "@nestjs/websockets": "^8.3.1",
     "@prisma/client": "^3.10.0",
     "canvas": "^2.9.0",
     "class-transformer": "^0.5.1",

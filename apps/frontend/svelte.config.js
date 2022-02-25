@@ -32,6 +32,7 @@ const config = {
         proxy: {
           '/api': {
             target: `http://localhost:${process.env.VITE_API_PORT}`,
+            ws: true,
           },
         },
       },

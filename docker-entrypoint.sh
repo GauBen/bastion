@@ -5,4 +5,4 @@ gosu postgres pg_ctl start
 pnpm prisma migrate deploy
 
 # Start the server
-node .
+pnpm start
