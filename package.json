@@ -9,9 +9,6 @@
   },
   "main": "run.js",
   "packageManager": "pnpm@6.32.1",
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
   "private": true,
   "scripts": {
     "build": "pnpm run build --recursive",
