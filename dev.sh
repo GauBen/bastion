@@ -19,6 +19,10 @@ echo
 
 echo -e "${RED}▮  Starting a local database server${NC}"
 docker-compose up --wait
+if [ ! -f '.env' ]; then
+  echo ".env file not found, using the default (.env.example)"
+  cp .env.example .env
+fi
 pnpm prisma migrate deploy
 function cleanup() { docker-compose stop; echo; }
 trap cleanup EXIT
