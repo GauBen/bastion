@@ -28,7 +28,7 @@ export class UserService {
     return this.prismaService.$queryRaw<
       Array<{ id: number; name: string; displayName: string }>
     >`
-      SELECT id, name, "displayName"
+      SELECT id, MAX(name) AS name, MAX("displayName") AS "displayName"
       -- Get users who sent and received messages to 'user'
       FROM (
         -- 'user' is the recipient
@@ -40,7 +40,8 @@ export class UserService {
         INNER JOIN (SELECT "fromId", MAX(id) AS last FROM "Message" WHERE "toId" = ${user.id} GROUP BY "fromId") t ON "User".id = t."fromId"
       ) t
       -- Order them by last message first
-      ORDER BY last DESC
+      GROUP BY id
+      ORDER BY MAX(last) DESC
     `
   }
 
