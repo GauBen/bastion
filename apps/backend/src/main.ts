@@ -8,8 +8,14 @@ import { AppModule } from './app.module.js'
 export const bootstrap = async () => {
   const __dirname = new URL('.', import.meta.url).pathname
   dotenv({ path: `${__dirname}/../../../.env` })
-  // @ts-expect-error Monkey patching the global object
-  globalThis.fetch = fetch
+
+  Object.defineProperties(globalThis, {
+    fetch: {
+      enumerable: true,
+      configurable: true,
+      value: fetch,
+    },
+  })
 
   const app = await NestFactory.create(AppModule)
   app.use(cookieParser())
