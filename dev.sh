@@ -3,6 +3,7 @@
 # - Volta (https://volta.sh/)
 # - Docker (https://www.docker.com/get-started)
 
+set -eu # Exit on errors
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
