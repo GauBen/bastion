@@ -12,6 +12,7 @@ export class AppService {
 
   getImage(name: string, font: string): PNGStream {
     try {
+      const __dirname = new URL('.', import.meta.url).pathname
       registerFont(`${__dirname}/../resources/${font}.ttf`, {
         family: 'font',
       })

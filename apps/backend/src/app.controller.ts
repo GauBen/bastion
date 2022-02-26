@@ -88,6 +88,7 @@ export class AppController {
     @Res({ passthrough: true }) response: Response,
   ) {
     for (const extension of accept.split(',')) {
+      const __dirname = new URL('.', import.meta.url).pathname
       const filename = `${__dirname}/../../../storage/profile-pictures/${name}.${extension}`
       if (existsSync(filename))
         return new StreamableFile(createReadStream(filename), {
