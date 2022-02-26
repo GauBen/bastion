@@ -12,3 +12,10 @@ global {
     }
   }
 }
+
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    VITE_API_PORT: string
+    VITE_TENOR_KEY: string
+  }
+}

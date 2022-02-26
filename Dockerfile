@@ -19,6 +19,7 @@ RUN set -eux; \
 
 # Install dependencies and build the whole monorepo
 ENV VITE_API_PORT=3000
+ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
@@ -178,6 +179,7 @@ RUN pnpm prune && pnpm store prune
 # Start the application on port 3000
 ENV DATABASE_URL="postgresql://postgres@localhost:5432/postgres?schema=public"
 ENV VITE_API_PORT=3000
+ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 
 EXPOSE 3000
 STOPSIGNAL SIGINT

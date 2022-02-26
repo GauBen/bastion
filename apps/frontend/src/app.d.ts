@@ -29,4 +29,9 @@ global {
       title: string
     }
   }
+
+  interface ImportMetaEnv {
+    VITE_API_PORT: string
+    VITE_TENOR_KEY: string
+  }
 }

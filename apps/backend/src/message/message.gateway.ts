@@ -10,6 +10,7 @@ import {
 } from '@nestjs/websockets'
 import { default as cookieParser } from 'cookie-parser'
 import { Server, Socket } from 'socket.io'
+import { gifDetails } from 'svelte-tenor/api'
 import { UserService } from '../user/user.service.js'
 import { CreateMessageDto } from './message.dto.js'
 import { MessageService } from './message.service.js'
@@ -56,18 +57,26 @@ export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
 
   @SubscribeMessage('message')
   async handleMessage(
-    @MessageBody() { toId, body }: CreateMessageDto,
+    @MessageBody() { toId, gif, body }: CreateMessageDto,
     @ConnectedSocket() socket: Socket,
   ) {
     try {
+      if (gif) {
+        body = JSON.stringify(
+          (await gifDetails({ key: process.env.VITE_TENOR_KEY, ids: [body] }))
+            .results[0],
+        )
+      }
       await this.messageService.createMessage({
         fromId: socket.user.id,
         toId,
+        gif,
         body,
       })
-      socket.emit('message', { body, me: true })
-      socket.to(`user:${toId}`).emit('message', { body, me: false })
-    } catch {
+      socket.emit('message', { gif, body, me: true })
+      socket.to(`user:${toId}`).emit('message', { gif, body, me: false })
+    } catch (e: any) {
+      console.error(e.message)
       socket.emit('error', 'The message cannot be sent.')
     }
   }

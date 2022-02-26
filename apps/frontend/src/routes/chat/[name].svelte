@@ -2,7 +2,8 @@
   import Header from '$lib/Header.svelte'
   import { io, Socket } from '$lib/io'
   import type { Load } from '@sveltejs/kit'
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
+  import { Gif, MobileKeyboard } from 'svelte-tenor'
 
   export const load: Load = ({ props }) => ({
     props,
@@ -13,50 +14,88 @@
 </script>
 
 <script lang="ts">
-  export let messages: Array<{ body: string; me: boolean }>
+  export let messages: Array<{
+    gif: boolean | undefined
+    body: string
+    me: boolean
+  }>
   export let contact: { id: number; name: string; displayName: string }
 
+  let wrapper: HTMLElement
   let value: string
-  let client: Socket
+  let socket: Socket
+  let gifs = false
 
   onMount(() => {
-    client = io()
+    socket = io()
 
-    client.on('message', (message) => {
+    socket.on('message', (message) => {
       messages = [...messages, message]
     })
   })
+
+  $: {
+    messages
+    tick().then(() => {
+      wrapper?.scrollTo({ top: wrapper.scrollHeight })
+    })
+  }
 </script>
 
 <main>
   <Header>{contact.displayName}</Header>
-  <div class="messages">
-    {#each messages as { me, body }}
-      <div class="message" class:me>
-        {body}
+  <div class="messages" bind:this={wrapper}>
+    {#each messages as { gif, me, body }}
+      <div class="message" class:gif class:me>
+        {#if gif}
+          <Gif gif={JSON.parse(body)} />
+        {:else}
+          {body}
+        {/if}
       </div>
     {/each}
   </div>
-  <form
-    on:submit|preventDefault={() => {
-      client.emit('message', { toId: contact.id, body: value })
-      value = ''
-    }}
-  >
-    <input type="text" required bind:value />
-    <button>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z"
-        />
-      </svg>
-    </button>
-  </form>
+  {#if gifs}
+    <div class="bottom keyboard">
+      <MobileKeyboard
+        q={value}
+        key={import.meta.env.VITE_TENOR_KEY}
+        on:click={({ detail }) => {
+          socket.emit('message', {
+            toId: contact.id,
+            gif: true,
+            body: detail.id,
+          })
+          gifs = false
+          value = ''
+        }}
+        on:close={() => (gifs = false)}
+      />
+    </div>
+  {:else}
+    <form
+      on:submit|preventDefault={() => {
+        socket.emit('message', { toId: contact.id, body: value })
+        value = ''
+      }}
+      class="bottom"
+    >
+      <button type="button" on:click={() => (gifs = true)}>GIF</button>
+      <input type="text" required bind:value />
+      <button type="submit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z"
+          />
+        </svg>
+      </button>
+    </form>
+  {/if}
 </main>
 
 <style lang="scss">
@@ -69,10 +108,6 @@
 
   form {
     display: flex;
-    padding: 0.5rem;
-    border-top: 1px solid $border;
-    background-color: $light-background;
-    box-shadow: 0 1em 2em $shadow;
 
     > input {
       height: 2em;
@@ -106,6 +141,14 @@
     max-width: min(75%, 500px);
     z-index: 1;
 
+    &.gif {
+      padding: 0;
+
+      :global(.gif) {
+        border-radius: 0.5em;
+      }
+    }
+
     &.me {
       align-self: end;
     }
@@ -113,5 +156,12 @@
 
   .message:first-of-type {
     margin-top: auto;
+  }
+
+  .bottom {
+    padding: 0.5rem;
+    border-top: 1px solid $border;
+    background-color: $light-background;
+    box-shadow: 0 1em 2em $shadow;
   }
 </style>
