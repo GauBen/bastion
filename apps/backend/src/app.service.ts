@@ -1,5 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { createCanvas, PNGStream, registerFont } from 'canvas'
+import type { PNGStream } from 'canvas'
+import canvas from 'canvas'
+
+const { createCanvas, registerFont } = canvas
 
 @Injectable()
 export class AppService {

@@ -42,5 +42,6 @@
     "clean": "rm -rf build",
     "dev": "nest start --watch --preserveWatchOutput",
     "lint": "eslint src --fix"
-  }
+  },
+  "type": "module"
 }

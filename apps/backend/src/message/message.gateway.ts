@@ -8,11 +8,11 @@ import {
   WebSocketGateway,
   WsException,
 } from '@nestjs/websockets'
-import * as cookieParser from 'cookie-parser'
+import { default as cookieParser } from 'cookie-parser'
 import { Server, Socket } from 'socket.io'
-import { UserService } from '../user/user.service'
-import { CreateMessageDto } from './message.dto'
-import { MessageService } from './message.service'
+import { UserService } from '../user/user.service.js'
+import { CreateMessageDto } from './message.dto.js'
+import { MessageService } from './message.service.js'
 
 @WebSocketGateway({
   path: '/api/socket.io',

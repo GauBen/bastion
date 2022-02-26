@@ -15,10 +15,10 @@ import { User } from '@prisma/client'
 import { IsString } from 'class-validator'
 import { Request, Response } from 'express'
 import { createReadStream, existsSync } from 'fs'
-import { AppService } from './app.service'
-import { MessageService } from './message/message.service'
-import { CreateUserDto } from './user/user.dto'
-import { UserService } from './user/user.service'
+import { AppService } from './app.service.js'
+import { MessageService } from './message/message.service.js'
+import { CreateUserDto } from './user/user.dto.js'
+import { UserService } from './user/user.service.js'
 
 class GetImageParams {
   @IsString()
