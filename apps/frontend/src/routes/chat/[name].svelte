@@ -87,7 +87,7 @@
       class="bottom"
     >
       <button type="button" on:click={() => (gifs = true)}>GIF</button>
-      <input type="text" required bind:value />
+      <input type="text" required maxlength="150" bind:value />
       <button type="submit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
