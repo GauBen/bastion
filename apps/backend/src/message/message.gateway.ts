@@ -1,4 +1,9 @@
-import { UnauthorizedException, UsePipes, ValidationPipe } from '@nestjs/common'
+import {
+  BadRequestException,
+  UnauthorizedException,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
@@ -62,19 +67,29 @@ export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
   ) {
     try {
       if (gif) {
-        body = JSON.stringify(
-          (await gifDetails({ key: process.env.VITE_TENOR_KEY, ids: [body] }))
-            .results[0],
-        )
+        const details = (
+          await gifDetails({ key: process.env.VITE_TENOR_KEY, ids: [body] })
+        ).results
+        if (details.length !== 1) throw new BadRequestException()
+        body = JSON.stringify(details[0])
       }
-      await this.messageService.createMessage({
+      const message = await this.messageService.createMessage({
         fromId: socket.user.id,
         toId,
         gif,
         body,
       })
-      socket.emit('message', { gif, body, me: true })
-      socket.to(`user:${toId}`).emit('message', { gif, body, me: false })
+      socket.emit('message', { contact: message.to, gif, body, me: true })
+      socket.to(`user:${toId}`).emit('message', {
+        contact: {
+          id: socket.user.id,
+          name: socket.user.name,
+          displayName: socket.user.displayName,
+        },
+        gif,
+        body,
+        me: false,
+      })
     } catch (e: any) {
       console.error(e.message)
       socket.emit('error', 'The message cannot be sent.')

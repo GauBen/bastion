@@ -1,6 +1,11 @@
 <script lang="ts" context="module">
+  import { io } from '$lib/io'
   import Nav from '$lib/Nav.svelte'
+  import type { User } from '@prisma/client'
   import type { Load } from '@sveltejs/kit'
+  import { onMount } from 'svelte'
+  import { flip } from 'svelte/animate'
+  import { slide } from 'svelte/transition'
 
   export const load: Load = ({ props }) => ({
     props,
@@ -14,13 +19,24 @@
     name: string
     displayName: string
   }[] = []
+
+  onMount(() => {
+    const socket = io()
+    socket.on('message', ({ contact }: { contact: User }) => {
+      contacts = [contact, ...contacts.filter((c) => c.id !== contact.id)]
+    })
+  })
 </script>
 
 <main>
   <div class="people">
     <div class="shadow">
-      {#each contacts as contact}
-        <div class="person">
+      {#each contacts as contact (contact.id)}
+        <div
+          class="person"
+          animate:flip={{ duration: 200 }}
+          transition:slide|local={{ duration: 200 }}
+        >
           <img
             src="/api/image?{new URLSearchParams({
               name: contact.name,
@@ -56,7 +72,8 @@
   }
 
   .shadow {
-    box-shadow: 0 1em 2em $shadow;
+    background-color: $shadow;
+    box-shadow: 0 0 2em 1em $shadow;
   }
 
   .person {

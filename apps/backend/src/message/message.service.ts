@@ -29,6 +29,9 @@ export class MessageService {
   }
 
   async createMessage(data: Prisma.MessageUncheckedCreateInput) {
-    return this.prismaService.message.create({ data })
+    return this.prismaService.message.create({
+      data,
+      include: { to: { select: { id: true, name: true, displayName: true } } },
+    })
   }
 }

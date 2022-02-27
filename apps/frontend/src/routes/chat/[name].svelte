@@ -21,7 +21,6 @@
   }>
   export let contact: { id: number; name: string; displayName: string }
 
-  let wrapper: HTMLElement
   let value: string
   let socket: Socket
   let gifs = false
@@ -30,14 +29,21 @@
     socket = io()
 
     socket.on('message', (message) => {
+      if (message.contact.id !== contact.id) return
       messages = [...messages, message]
     })
   })
 
+  let wrapper: HTMLElement
+  let firstScroll = true
   $: {
     messages
     tick().then(() => {
-      wrapper?.scrollTo({ top: wrapper.scrollHeight })
+      wrapper?.scrollTo({
+        top: wrapper.scrollHeight,
+        behavior: firstScroll ? 'auto' : 'smooth',
+      })
+      firstScroll = false
     })
   }
 </script>
