@@ -7,6 +7,7 @@
   <title>
     {$page.stuff.title ? `${$page.stuff.title} – ` : ''}Bastion
   </title>
+  <meta name="description" content={$page.stuff.title} />
 </svelte:head>
 
 {#if $session.mobile}
