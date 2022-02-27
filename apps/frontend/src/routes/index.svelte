@@ -46,7 +46,11 @@
             width={64}
             height={64}
           />
-          <a class="display-name" href="/chat/{contact.name}">
+          <a
+            class="display-name"
+            href="/chat/{contact.name}"
+            sveltekit:prefetch
+          >
             {contact.displayName}
           </a>
           <span class="user-name">{contact.name}</span>
