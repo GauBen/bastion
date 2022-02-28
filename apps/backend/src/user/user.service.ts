@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { nanoid } from 'nanoid'
+import { shuffledSearch } from 'svelte-tenor/api'
 import { PrismaService } from '../prisma.service.js'
 import { CreateUserDto } from './user.dto.js'
 
@@ -48,12 +49,37 @@ export class UserService {
     const user = await this.prismaService.user.create({
       data: { name, displayName, token: nanoid() },
     })
-    await this.prismaService.message.create({
-      data: {
-        body: 'Welcome to Bastion, the most secure messaging app!',
-        from: { connect: { id: 1 } },
-        to: { connect: { id: user.id } },
-      },
+    // Let's welcome new users with a GIF!
+    const gif = await shuffledSearch({
+      key: process.env.VITE_TENOR_KEY,
+      q: 'hello',
+      limit: 1,
+      safety: 'high',
+    }).then(({ results }) => results[0])
+    await this.prismaService.message.createMany({
+      data: [
+        {
+          fromId: 1,
+          toId: user.id,
+          gif: true,
+          body: JSON.stringify(gif),
+        },
+        {
+          fromId: 1,
+          toId: user.id,
+          body: 'Welcome to Bastion, the most secure messaging app!',
+        },
+        {
+          fromId: 1,
+          toId: user.id,
+          body: 'Make yourself at home by setting up an avatar.',
+        },
+        {
+          fromId: 1,
+          toId: user.id,
+          body: `Current server version: VEhDb24yMntHTH5+SEYhfQ==.`,
+        },
+      ],
     })
     return user
   }
