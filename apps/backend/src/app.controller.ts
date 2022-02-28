@@ -8,46 +8,23 @@ import {
   Query,
   Req,
   Res,
-  StreamableFile,
   UnauthorizedException,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { IsString } from 'class-validator'
 import { Request, Response } from 'express'
-import { createReadStream, existsSync } from 'fs'
-import { AppService } from './app.service.js'
+import { GenerateImageParams, GetImageParams } from './image/image.dto.js'
+import { ImageService } from './image/image.service.js'
 import { MessageService } from './message/message.service.js'
 import { CreateUserDto } from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
 
-class GetImageParams {
-  @IsString()
-  name!: string
-
-  @IsString()
-  accept!: string
-}
-
-class GenerateImageParams {
-  @IsString()
-  name!: string
-
-  @IsString()
-  font!: string
-}
-
 @Controller('/api')
 export class AppController {
   constructor(
-    private readonly appService: AppService,
+    private readonly imageService: ImageService,
     private readonly messageService: MessageService,
     private readonly userService: UserService,
   ) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello()
-  }
 
   @Get('/me')
   async getUser(@Req() request: Request): Promise<User> {
@@ -84,30 +61,24 @@ export class AppController {
 
   @Get('/image')
   getImage(
-    @Query() { name, accept }: GetImageParams,
     @Res({ passthrough: true }) response: Response,
+    @Query() { name, accept }: GetImageParams,
   ) {
-    for (const extension of accept.split(',')) {
-      const __dirname = new URL('.', import.meta.url).pathname
-      const filename = `${__dirname}/../../../storage/profile-pictures/${name}.${extension}`
-      if (existsSync(filename))
-        return new StreamableFile(createReadStream(filename), {
-          type: `image/${extension}`,
-        })
+    try {
+      return this.imageService.getImage(name, accept.split(','))
+    } catch {
+      response.redirect(
+        `./image-generator?${new URLSearchParams({
+          name,
+          font: 'Gilroy-ExtraBold',
+        })}`,
+      )
+      response.end()
     }
-    response.redirect(
-      `./image-generator?${new URLSearchParams({
-        name,
-        font: 'Gilroy-ExtraBold',
-      })}`,
-    )
-    response.end()
   }
 
   @Get('/image-generator')
   generateImage(@Query() { name, font }: GenerateImageParams) {
-    return new StreamableFile(this.appService.getImage(name, font), {
-      type: 'image/png',
-    })
+    return this.imageService.generateImage(name, font)
   }
 }
