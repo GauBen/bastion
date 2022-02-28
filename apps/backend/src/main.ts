@@ -9,12 +9,9 @@ export const bootstrap = async () => {
   const __dirname = new URL('.', import.meta.url).pathname
   dotenv({ path: `${__dirname}/../../../.env` })
 
+  // Add `fetch` for svelte-tenor
   Object.defineProperties(globalThis, {
-    fetch: {
-      enumerable: true,
-      configurable: true,
-      value: fetch,
-    },
+    fetch: { enumerable: true, configurable: true, value: fetch },
   })
 
   const app = await NestFactory.create(AppModule)
