@@ -46,16 +46,20 @@ export class UserService {
     if (await this.prismaService.user.findUnique({ where: { name } })) {
       throw new BadRequestException(['name already taken'])
     }
-    const user = await this.prismaService.user.create({
-      data: { name, displayName, token: nanoid() },
-    })
-    // Let's welcome new users with a GIF!
-    const gif = await shuffledSearch({
-      key: process.env.VITE_TENOR_KEY,
-      q: 'hello',
-      limit: 1,
-      safety: 'high',
-    }).then(({ results }) => results[0])
+    // Parallelize creation tasks
+    const [user, gif] = await Promise.all([
+      // Create a new user
+      this.prismaService.user.create({
+        data: { name, displayName, token: nanoid() },
+      }),
+      // Welcome them with a GIF
+      shuffledSearch({
+        key: process.env.VITE_TENOR_KEY,
+        q: 'hello',
+        limit: 1,
+        safety: 'high',
+      }).then(({ results }) => results[0]),
+    ])
     await this.prismaService.message.createMany({
       data: [
         {
