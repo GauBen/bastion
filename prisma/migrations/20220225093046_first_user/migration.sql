@@ -22,5 +22,5 @@ BEGIN
 END
 $$ LANGUAGE PLPGSQL STABLE;
 
--- Insert a user named `Bastion`
-INSERT INTO "User" ("name", "displayName", "token") VALUES ('bastion', 'Bastion', nanoid());
+-- Insert a user named `Bastion Bot`
+INSERT INTO "User" ("name", "displayName", "token") VALUES ('bastion', 'Bastion Bot', nanoid());

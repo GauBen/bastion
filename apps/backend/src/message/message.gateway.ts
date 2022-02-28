@@ -90,6 +90,17 @@ export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
         body,
         me: false,
       })
+
+      // Handle messages sent to Bastion Bot
+      if (message.to.id === 1) {
+        const anwser = await this.messageService.handleBotMessage(message)
+        socket.emit('message', {
+          contact: message.to,
+          body: anwser.body,
+          gif: anwser.gif,
+          me: false,
+        })
+      }
     } catch (e: any) {
       console.error(e.message)
       socket.emit('error', 'The message cannot be sent.')
