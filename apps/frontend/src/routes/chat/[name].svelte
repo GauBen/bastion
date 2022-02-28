@@ -25,32 +25,48 @@
   let socket: Socket
   let gifs = false
 
-  onMount(() => {
-    socket = io()
+  let wrapper: HTMLElement
+  let placeholder: HTMLElement
+  let firstScroll = true
 
+  const resizePlaceholder = () => {
+    const lastMessage = wrapper.lastElementChild as HTMLElement
+    const place =
+      placeholder.offsetHeight +
+      wrapper.offsetHeight -
+      8 - // Gap
+      (lastMessage ? lastMessage.offsetTop + lastMessage.offsetHeight : 0)
+    placeholder.style.setProperty('flex-basis', `${place > 0 ? place : 0}px`)
+  }
+
+  // Animate messages when they arrive
+  $: if (wrapper && placeholder) {
+    messages
+    tick().then(() => {
+      wrapper.scrollTo({
+        top: wrapper.scrollHeight,
+        behavior: firstScroll ? 'auto' : 'smooth',
+      })
+      setTimeout(resizePlaceholder, 300)
+      firstScroll = false
+    })
+  }
+
+  onMount(() => {
+    resizePlaceholder()
+
+    socket = io()
     socket.on('message', (message) => {
       if (message.contact.id !== contact.id) return
       messages = [...messages, message]
     })
   })
-
-  let wrapper: HTMLElement
-  let firstScroll = true
-  $: {
-    messages
-    tick().then(() => {
-      wrapper?.scrollTo({
-        top: wrapper.scrollHeight,
-        behavior: firstScroll ? 'auto' : 'smooth',
-      })
-      firstScroll = false
-    })
-  }
 </script>
 
 <main>
   <Header>{contact.displayName}</Header>
   <div class="messages" bind:this={wrapper}>
+    <div class="placeholder" bind:this={placeholder} />
     {#each messages as { gif, me, body }}
       <div class="message" class:gif class:me>
         {#if gif}
@@ -131,12 +147,17 @@
   }
 
   .messages {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    padding: 0.5em;
+    padding: 0 0.5em 0.5em;
     overflow: auto;
+  }
+
+  .placeholder {
+    flex-shrink: 0;
   }
 
   .message {
@@ -158,10 +179,6 @@
     &.me {
       align-self: end;
     }
-  }
-
-  .message:first-of-type {
-    margin-top: auto;
   }
 
   .bottom {
