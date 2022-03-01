@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { User } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { nanoid } from 'nanoid'
 import { shuffledSearch } from 'svelte-tenor/api'
 import { PrismaService } from '../prisma.service.js'
@@ -86,5 +86,9 @@ export class UserService {
       ],
     })
     return user
+  }
+
+  async updateUser(user: User, data: Prisma.UserUpdateInput) {
+    return this.prismaService.user.update({ data, where: { id: user.id } })
   }
 }

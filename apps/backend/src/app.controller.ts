@@ -9,21 +9,17 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseInterceptors,
   UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { User } from '@prisma/client'
-import { Request, Response, Express } from 'express'
+import { Request, Response } from 'express'
 import { GenerateImageParams, GetImageParams } from './image/image.dto.js'
 import { ImageService } from './image/image.service.js'
 import { MessageService } from './message/message.service.js'
-import { CreateUserDto } from './user/user.dto.js'
+import { CreateUserDto, UpdateUserDto } from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
-import { FileInterceptor } from '@nestjs/platform-express'
-import path from 'path'
-import * as fs from 'fs/promises'
-
-const __dirname = new URL('.', import.meta.url).pathname
 
 @Controller('/api')
 export class AppController {
@@ -66,22 +62,23 @@ export class AppController {
     return this.userService.register(createUserDto)
   }
 
-  @Post('/upload')
+  @Post('/update-profile')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @Req() request: Request,
-    @UploadedFile() file: Express.Multer.File,
+    @Body() { displayName }: UpdateUserDto,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    console.log(file)
-    // Get current user name
-    const username = await (await this.getUser(request)).name
-    // Generate the filepath for the storage of the profile picture
-    const extension = path.extname(file.originalname)
-    var filepath = `${__dirname}../../../storage/profile-pictures/${username}${extension}`
-
-    fs.writeFile(filepath, file.buffer)
-    // Give back the uploaded filename
-    return { file: `${username}${extension}` }
+    const user = await this.getUser(request)
+    const tasks: Array<Promise<unknown>> = []
+    if (displayName) {
+      tasks.push(this.userService.updateUser(user, { displayName }))
+    }
+    if (file) {
+      tasks.push(this.imageService.saveImage(user, file))
+    }
+    await Promise.all(tasks)
+    return true
   }
 
   @Get('/image')

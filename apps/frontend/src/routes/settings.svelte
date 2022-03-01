@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import { session } from '$app/stores'
   import Header from '$lib/Header.svelte'
   import Nav from '$lib/Nav.svelte'
   import type { Load } from '@sveltejs/kit'
@@ -14,33 +15,35 @@
 </script>
 
 <script lang="ts">
-  let myFile: HTMLInputElement
-  const submitImage = async () => {
-    var data = new FormData()
-    if (myFile.files === null) {
-      alert('Oops ! Your file is null')
-    } else {
-      data.append('file', myFile.files[0])
+  let displayName = $session.user?.displayName ?? ''
+  let files: FileList | undefined
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      })
-      const body = await response.json()
-    }
+  const submit = async () => {
+    const body = new FormData()
+    if (displayName.length > 0) body.append('displayName', displayName)
+    if (files && files.length === 1) body.append('file', files[0])
+
+    await fetch('/api/update-profile', {
+      method: 'POST',
+      body,
+    })
   }
 </script>
 
 <main>
   <Header>Settings</Header>
-  <form on:submit|preventDefault={submitImage}>
+  <form on:submit|preventDefault={submit}>
     <p>
-      <label>Display name<br /><input type="text" /></label>
+      <label>
+        Display name<br />
+        <input type="text" bind:value={displayName} />
+      </label>
     </p>
     <p>
-      <label
-        >Profile picture<br /><input type="file" bind:this={myFile} /></label
-      >
+      <label>
+        Profile picture<br />
+        <input type="file" bind:files />
+      </label>
     </p>
     <p class="center">
       <button>Save</button>

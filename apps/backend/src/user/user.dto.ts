@@ -1,4 +1,4 @@
-import { IsAlphanumeric, Length } from 'class-validator'
+import { IsAlphanumeric, IsOptional, IsString, Length } from 'class-validator'
 
 export class CreateUserDto {
   @IsAlphanumeric()
@@ -7,4 +7,10 @@ export class CreateUserDto {
 
   @Length(1, 30)
   displayName!: string
+}
+
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  displayName?: string
 }

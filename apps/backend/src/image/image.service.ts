@@ -4,17 +4,26 @@ import {
   NotFoundException,
   StreamableFile,
 } from '@nestjs/common'
+import { User } from '@prisma/client'
 import canvas from 'canvas'
 import { createReadStream, existsSync } from 'fs'
+import { writeFile } from 'fs/promises'
+import { extname } from 'path'
 
 const { createCanvas, registerFont } = canvas
 const __dirname = new URL('.', import.meta.url).pathname
+const storage = `${__dirname}/../../../../storage/profile-pictures/`
 
 @Injectable()
 export class ImageService {
+  saveImage({ name }: User, { buffer, originalname }: Express.Multer.File) {
+    const extension = extname(originalname)
+    return writeFile(`${storage}${name}${extension}`, buffer)
+  }
+
   getImage(name: string, extensions: string[]): StreamableFile {
     for (const extension of extensions) {
-      const filename = `${__dirname}/../../../../storage/profile-pictures/${name}.${extension}`
+      const filename = `${storage}${name}.${extension}`
       if (existsSync(filename))
         return new StreamableFile(createReadStream(filename), {
           type: `image/${extension}`,
