@@ -13,14 +13,34 @@
       : { status: 307, redirect: '/register' }
 </script>
 
+<script lang="ts">
+  let myFile: HTMLInputElement
+  const submitImage = async () => {
+    var data = new FormData()
+    if (myFile.files === null) {
+      alert('Oops ! Your file is null')
+    } else {
+      data.append('file', myFile.files[0])
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      })
+      const body = await response.json()
+    }
+  }
+</script>
+
 <main>
   <Header>Settings</Header>
-  <form on:submit|preventDefault>
+  <form on:submit|preventDefault={submitImage}>
     <p>
       <label>Display name<br /><input type="text" /></label>
     </p>
     <p>
-      <label>Profile picture<br /><input type="file" /></label>
+      <label
+        >Profile picture<br /><input type="file" bind:this={myFile} /></label
+      >
     </p>
     <p class="center">
       <button>Save</button>

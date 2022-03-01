@@ -9,14 +9,21 @@ import {
   Req,
   Res,
   UnauthorizedException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { Request, Response } from 'express'
+import { Request, Response, Express } from 'express'
 import { GenerateImageParams, GetImageParams } from './image/image.dto.js'
 import { ImageService } from './image/image.service.js'
 import { MessageService } from './message/message.service.js'
 import { CreateUserDto } from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
+import { FileInterceptor } from '@nestjs/platform-express'
+import path from 'path'
+import * as fs from 'fs/promises'
+
+const __dirname = new URL('.', import.meta.url).pathname
 
 @Controller('/api')
 export class AppController {
@@ -57,6 +64,24 @@ export class AppController {
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.register(createUserDto)
+  }
+
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Req() request: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    console.log(file)
+    // Get current user name
+    const username = await (await this.getUser(request)).name
+    // Generate the filepath for the storage of the profile picture
+    const extension = path.extname(file.originalname)
+    var filepath = `${__dirname}../../../storage/profile-pictures/${username}${extension}`
+
+    fs.writeFile(filepath, file.buffer)
+    // Give back the uploaded filename
+    return { file: `${username}${extension}` }
   }
 
   @Get('/image')
