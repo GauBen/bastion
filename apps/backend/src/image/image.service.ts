@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  PayloadTooLargeException,
   StreamableFile,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
@@ -16,9 +17,33 @@ const storage = `${__dirname}/../../../../storage/profile-pictures/`
 
 @Injectable()
 export class ImageService {
-  saveImage({ name }: User, { buffer, originalname }: Express.Multer.File) {
+  saveImage(
+    { name }: User,
+    { buffer, originalname, size }: Express.Multer.File,
+  ) {
     const extension = extname(originalname)
-    return writeFile(`${storage}${name}${extension}`, buffer)
+    if (extension === '.jpeg' || extension === '.jpg' || extension === '.png') {
+      if (size <= 1024 * 1024) {
+        const filenameJPG = `${storage}${name}.jpg`
+        const filenameJPEG = `${storage}${name}.jpeg`
+        const filenamePNG = `${storage}${name}.png`
+        if (
+          !existsSync(filenameJPG) &&
+          !existsSync(filenameJPEG) &&
+          !existsSync(filenamePNG)
+        ) {
+          return writeFile(`${storage}${name}${extension}`, buffer)
+        } else {
+          throw new BadRequestException([
+            'file already exists, delete it if you want to upload a new one',
+          ])
+        }
+      } else {
+        throw new PayloadTooLargeException(['file is too big'])
+      }
+    } else {
+      throw new BadRequestException(['file has wrong type'])
+    }
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {
