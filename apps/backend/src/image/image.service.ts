@@ -22,28 +22,24 @@ export class ImageService {
     { buffer, originalname, size }: Express.Multer.File,
   ) {
     const extension = extname(originalname)
-    if (extension === '.jpeg' || extension === '.jpg' || extension === '.png') {
-      if (size <= 1024 * 1024) {
-        const filenameJPG = `${storage}${name}.jpg`
-        const filenameJPEG = `${storage}${name}.jpeg`
-        const filenamePNG = `${storage}${name}.png`
-        if (
-          !existsSync(filenameJPG) &&
-          !existsSync(filenameJPEG) &&
-          !existsSync(filenamePNG)
-        ) {
-          return writeFile(`${storage}${name}${extension}`, buffer)
-        } else {
-          throw new BadRequestException([
-            'file already exists, delete it if you want to upload a new one',
-          ])
-        }
-      } else {
-        throw new PayloadTooLargeException(['file is too big'])
-      }
-    } else {
+    const validExt = ['.jpeg', '.jpg', '.png']
+    if (validExt.includes(extension)) {
       throw new BadRequestException(['file has wrong type'])
     }
+    if (size <= 1024 * 1024) {
+      throw new PayloadTooLargeException(['file is too big'])
+    }
+    const filename = `${storage}${name}.`
+    if (
+      existsSync(filename + 'png') ||
+      existsSync(filename + 'jpg') ||
+      existsSync(filename + 'jpeg')
+    ) {
+      throw new BadRequestException([
+        'file already exists, delete it if you want to upload a new one',
+      ])
+    }
+    return writeFile(`${storage}${name}${extension}`, buffer)
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {
