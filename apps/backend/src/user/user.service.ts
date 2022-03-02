@@ -17,16 +17,16 @@ export class UserService {
   async fromName(name: string) {
     return this.prismaService.user.findUnique({
       where: { name },
-      select: { id: true, name: true, displayName: true },
+      select: { id: true, name: true, displayName: true, admin: true },
     })
   }
 
   async getContacts(user: User) {
     // This query is too complex to be written with Prisma API
     return this.prismaService.$queryRaw<
-      Array<{ id: number; name: string; displayName: string }>
+      Array<{ id: number; name: string; displayName: string; admin: boolean }>
     >`
-      SELECT id, MAX(name) AS name, MAX("displayName") AS "displayName"
+      SELECT id, MAX(name) AS name, MAX("displayName") AS "displayName", EVERY("admin") AS "admin"
       -- Get users who sent and received messages to 'user'
       FROM (
         -- 'user' is the recipient
