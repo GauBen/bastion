@@ -25,6 +25,7 @@ if [ ! -f '.env' ]; then
   cp .env.example .env
 fi
 pnpm prisma migrate deploy
+pnpm prisma generate
 function cleanup() { docker-compose stop; echo; }
 trap cleanup EXIT
 echo
