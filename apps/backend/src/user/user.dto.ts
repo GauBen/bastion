@@ -1,8 +1,21 @@
-import { IsAlphanumeric, IsOptional, IsString, Length } from 'class-validator'
+import {
+  IsLowercase,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator'
 
 export class CreateUserDto {
-  @IsAlphanumeric()
   @Length(3, 20)
+  @IsLowercase()
+  @Matches(/^[a-z]/i, {
+    message: ({ property }) => `${property} must start with a letter`,
+  })
+  @Matches(/^[a-z._]+$/i, {
+    message: ({ property }) =>
+      `${property} must be made of letters, dots and underscores`,
+  })
   name!: string
 
   @Length(1, 30)
