@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsLowercase,
   IsOptional,
   IsString,
@@ -31,4 +32,18 @@ export class UpdateUserDto {
 export class PromoteUserDto {
   @IsString()
   key!: string
+}
+
+export class FindUsersDto {
+  @IsOptional()
+  @IsString()
+  name?: string
+
+  @IsOptional()
+  @IsString()
+  displayName?: string
+
+  @IsOptional()
+  @IsBoolean()
+  admin?: boolean
 }

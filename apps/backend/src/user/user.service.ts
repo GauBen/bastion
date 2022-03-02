@@ -104,4 +104,15 @@ export class UserService {
       where: { id },
     })
   }
+
+  async findUsers(where: Prisma.UserWhereInput) {
+    try {
+      return await this.prismaService.user.findMany({
+        select: { id: true, name: true, displayName: true, admin: true },
+        where,
+      })
+    } catch {
+      throw new BadRequestException('Malformed search filters.')
+    }
+  }
 }

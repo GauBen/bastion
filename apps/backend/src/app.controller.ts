@@ -20,6 +20,7 @@ import { ImageService } from './image/image.service.js'
 import { MessageService } from './message/message.service.js'
 import {
   CreateUserDto,
+  FindUsersDto,
   PromoteUserDto,
   UpdateUserDto,
 } from './user/user.dto.js'
@@ -112,5 +113,12 @@ export class AppController {
   async promoteUser(@Req() req: Request, @Body() { key }: PromoteUserDto) {
     const user = await this.getUser(req)
     return this.userService.promoteUser(user, key)
+  }
+
+  @Post('/find-users')
+  async findUsers(@Req() req: Request, @Body() where: FindUsersDto) {
+    const user = await this.getUser(req)
+    if (!user.admin) throw new UnauthorizedException()
+    return this.userService.findUsers(where)
   }
 }
