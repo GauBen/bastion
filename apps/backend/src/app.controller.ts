@@ -18,7 +18,11 @@ import { Request, Response } from 'express'
 import { GenerateImageParams, GetImageParams } from './image/image.dto.js'
 import { ImageService } from './image/image.service.js'
 import { MessageService } from './message/message.service.js'
-import { CreateUserDto, UpdateUserDto } from './user/user.dto.js'
+import {
+  CreateUserDto,
+  PromoteUserDto,
+  UpdateUserDto,
+} from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
 
 @Controller('/api')
@@ -102,5 +106,11 @@ export class AppController {
   @Get('/image-generator')
   generateImage(@Query() { name, font }: GenerateImageParams) {
     return this.imageService.generateImage(name, font)
+  }
+
+  @Post('/promote-user')
+  async promoteUser(@Req() req: Request, @Body() { key }: PromoteUserDto) {
+    const user = await this.getUser(req)
+    return this.userService.promoteUser(user, key)
   }
 }

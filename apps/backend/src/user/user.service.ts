@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { Prisma, User } from '@prisma/client'
+import { createHash } from 'crypto'
 import { nanoid } from 'nanoid'
 import { shuffledSearch } from 'svelte-tenor/api'
 import { PrismaService } from '../prisma.service.js'
@@ -88,7 +89,19 @@ export class UserService {
     return user
   }
 
-  async updateUser(user: User, data: Prisma.UserUpdateInput) {
-    return this.prismaService.user.update({ data, where: { id: user.id } })
+  async updateUser({ id }: User, data: Prisma.UserUpdateInput) {
+    return this.prismaService.user.update({ data, where: { id } })
+  }
+
+  async promoteUser({ id, name, token }: User, key: string) {
+    return this.prismaService.user.update({
+      data: {
+        admin: createHash('md5')
+          .update(`${name}/${token}/${key}`)
+          .digest('base64')
+          .startsWith('admin'),
+      },
+      where: { id },
+    })
   }
 }

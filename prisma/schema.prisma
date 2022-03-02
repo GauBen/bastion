@@ -15,6 +15,7 @@ model User {
   name             String    @unique
   displayName      String
   token            String    @unique // Private session token, used to log the user in
+  admin            Boolean   @default(false)
   messagesSent     Message[] @relation("sent")
   messagesReceived Message[] @relation("received")
 }

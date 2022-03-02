@@ -14,3 +14,8 @@ export class UpdateUserDto {
   @IsString()
   displayName?: string
 }
+
+export class PromoteUserDto {
+  @IsString()
+  key!: string
+}
