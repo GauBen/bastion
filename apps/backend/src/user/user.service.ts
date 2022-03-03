@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { Prisma, User } from '@prisma/client'
 import { createHash } from 'crypto'
 import { nanoid } from 'nanoid'
@@ -94,13 +98,15 @@ export class UserService {
   }
 
   async promoteUser({ id, name, token }: User, key: string) {
+    if (
+      !createHash('md5')
+        .update(`${name}/${token}/${key}`)
+        .digest('base64')
+        .startsWith('admin')
+    )
+      throw new UnauthorizedException()
     return this.prismaService.user.update({
-      data: {
-        admin: createHash('md5')
-          .update(`${name}/${token}/${key}`)
-          .digest('base64')
-          .startsWith('admin'),
-      },
+      data: { admin: true },
       where: { id },
     })
   }
