@@ -24,7 +24,7 @@ export class MessageService {
         SELECT id, "fromId", "toId", gif, body, false AS me FROM "Message" WHERE "fromId" = ${contact.id} AND "toId" = ${user.id}
       ) t
       -- Order them by first message first
-      ORDER BY id ASC
+      ORDER BY id ASC, me DESC
     `
     return { contact, messages }
   }

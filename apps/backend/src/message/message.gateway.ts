@@ -80,7 +80,7 @@ export class MessageGateway implements OnGatewayInit, OnGatewayConnection {
         body,
       })
       socket.emit('message', { contact: message.to, gif, body, me: true })
-      socket.to(`user:${toId}`).emit('message', {
+      socket.nsp.to(`user:${toId}`).emit('message', {
         contact: {
           id: socket.user.id,
           name: socket.user.name,
