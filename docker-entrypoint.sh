@@ -1,8 +1,5 @@
 # Start the PostgreSQL server
-gosu postgres pg_ctl start
+gosu postgres pg_ctl start --wait
 
-# Reset and populate the database
-pnpm prisma migrate deploy
-
-# Start the server
+# Start the Node.js server
 pnpm start

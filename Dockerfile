@@ -6,16 +6,16 @@
 FROM debian:bullseye-slim AS build
 WORKDIR /bastion-build
 
-# Copy the whole monorepo
-COPY . .
-
 # Install Volta
 ENV VOLTA_HOME=/root/.volta
 ENV PATH=$VOLTA_HOME/bin:$PATH
 RUN set -eux; \
 	apt-get update && apt-get install -y curl; \
-	curl https://get.volta.sh | bash -s -- --skip-setup; \
-	volta install node && volta install corepack
+	curl https://get.volta.sh | bash -s -- --skip-setup
+
+# Copy the whole monorepo
+COPY . .
+RUN volta install node && volta install corepack
 
 # Install dependencies and build the whole monorepo
 ENV VITE_API_PORT=3000
@@ -180,6 +180,12 @@ RUN pnpm prune && pnpm store prune
 ENV DATABASE_URL="postgresql://postgres@localhost:5432/postgres?schema=public"
 ENV VITE_API_PORT=3000
 ENV VITE_TENOR_KEY=O7AM9I8X5QC3
+
+# Apply migrations
+RUN set -eux; \
+	gosu postgres pg_ctl start --wait; \
+	pnpm prisma migrate deploy; \
+	rm -rf ./prisma/migrations/
 
 EXPOSE 3000
 STOPSIGNAL SIGINT
