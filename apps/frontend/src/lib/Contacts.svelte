@@ -65,8 +65,11 @@
     column-gap: 0.5em;
 
     > img {
+      width: 4rem;
+      height: 4rem;
       grid-row: 1 / 3;
       border-radius: 50%;
+      background: linear-gradient(to bottom, $accent 40%, $shadow);
     }
   }
 
