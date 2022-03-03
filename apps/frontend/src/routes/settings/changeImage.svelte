@@ -8,33 +8,36 @@
     session.user
       ? {
           stuff: {
-            title: 'Settings',
+            title: 'Profile picture',
           },
         }
       : { status: 307, redirect: '/register' }
 </script>
 
 <script lang="ts">
-  let displayName = $session.user?.displayName ?? ''
+  let deleteAvatar: string | undefined
   let files: FileList | undefined
   let errors: { [x: string]: string[] } = {
-    displayName: [],
+    deleteAvatar: [],
+    file: [],
   }
 
   const toSentence = (str: string) =>
     (str.at(0) ?? '').toUpperCase() + str.slice(1) + '.'
 
-  const submit = async () => {
+  const updateAvatar = async () => {
     const body = new FormData()
-    if (displayName.length > 0) body.append('displayName', displayName)
+    if (deleteAvatar === 'delete') body.append('deleteAvatar', deleteAvatar)
+    if (files && files.length === 1) body.append('file', files[0])
 
-    const response = await fetch('/api/update-profile', {
+    const response = await fetch('/api/update-avatar', {
       method: 'POST',
       body,
     })
     const responseBody = await response.json()
     errors = {
-      displayName: [],
+      file: [],
+      deleteAvatar: [],
     }
 
     if (response.status >= 400) {
@@ -52,36 +55,44 @@
       return
     }
   }
+
+  function setDelVal() {
+    deleteAvatar = 'delete'
+  }
 </script>
 
 <main>
-  <Header>Settings</Header>
-  <form on:submit|preventDefault={submit}>
+  <Header>Profile picture</Header>
+  <p class="center">
+    <img
+      src="/api/image?{new URLSearchParams({
+        name: $session.user?.name ?? '',
+        accept: 'png,jpg',
+      })}"
+      alt="{$session.user?.displayName ?? ''} picture"
+      width={128}
+      height={128}
+    />
+  </p>
+  <form on:submit|preventDefault={updateAvatar}>
     <p class="center">
-      <a href="/settings/changeImage" class="center">
-        <img
-          src="/api/image?{new URLSearchParams({
-            name: $session.user?.name ?? '',
-            accept: 'png,jpg',
-          })}"
-          alt="{$session.user?.displayName ?? ''} picture"
-          width={128}
-          height={128}
-        />
-      </a>
+      <button on:click={setDelVal}>Delete profile picture</button>
     </p>
+    {#each errors.deleteAvatar as error}
+      <div class="error">{toSentence(error)}</div>
+    {/each}
     <p>
       <label>
-        Display name<br />
-        <input type="text" bind:value={displayName} />
+        Change profile picture<br />
+        <input type="file" bind:files />
       </label>
-      {#each errors.displayName as error}
-        <div class="error">{toSentence(error)}</div>
-      {/each}
     </p>
     <p class="center">
-      <button>Save</button>
+      <button>Submit changes</button>
     </p>
+    {#each errors.file as error}
+      <div class="error">{toSentence(error)}</div>
+    {/each}
   </form>
   <Nav />
 </main>
@@ -91,7 +102,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: $background;
+    background-color: $light-background;
   }
 
   form {

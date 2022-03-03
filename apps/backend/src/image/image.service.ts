@@ -8,6 +8,7 @@ import {
 import { User } from '@prisma/client'
 import canvas from 'canvas'
 import { createReadStream, existsSync } from 'fs'
+import { unlink } from 'fs/promises'
 import { copyFile } from 'fs/promises'
 import { default as sizeOf } from 'image-size'
 
@@ -18,7 +19,7 @@ const storage = `${__dirname}/../../../../storage/profile-pictures/`
 @Injectable()
 export class ImageService {
   saveImage({ name }: User, { size, path }: Express.Multer.File) {
-    // Check file extension with image-size
+    // Check file type with image-size
     let fileInfo
     try {
       fileInfo = sizeOf(path)
@@ -33,9 +34,11 @@ export class ImageService {
     if (extension === 'jpeg') extension = 'jpg' // Change extension to jpg if jpeg
     const validExt = ['jpg', 'png']
     if (!validExt.includes(extension))
-      throw new BadRequestException(['file has wrong type'])
+      throw new BadRequestException([
+        'file has wrong type : use jpeg, jpg or png',
+      ])
 
-    // Check file type
+    // Check file size
     if (size > 1024 * 1024)
       throw new PayloadTooLargeException(['file is too big'])
 
@@ -47,7 +50,7 @@ export class ImageService {
       ])
     }
 
-    // Check image dimensions
+    // Check image dimensions (must be square)
     if (fileInfo.height === undefined || fileInfo.width === undefined)
       throw new BadRequestException(['file has wrong dimensions'])
     if (fileInfo.height != fileInfo.width)
@@ -57,6 +60,25 @@ export class ImageService {
 
     // Save new profile picture
     return copyFile(path, `${storage}${name}.${extension}`)
+  }
+
+  async deleteImage({ name }: User) {
+    const filename = `${storage}${name}`
+    if (!existsSync(`${filename}.jpg`) && !existsSync(`${filename}.png`)) {
+      throw new BadRequestException([
+        'deleteAvatar impossible because file does not exist',
+      ])
+    }
+    try {
+      await unlink(`${filename}.jpg`)
+    } catch (error) {
+      throw new BadRequestException(['deleteAvatar impossible jpg'])
+    }
+    try {
+      await unlink(`${filename}.png`)
+    } catch (error) {
+      throw new BadRequestException(['deleteAvatar impossible png'])
+    }
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {

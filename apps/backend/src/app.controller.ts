@@ -22,7 +22,8 @@ import {
   CreateUserDto,
   FindUsersDto,
   PromoteUserDto,
-  UpdateUserDto,
+  UpdateNameDto,
+  UpdateAvatarDto,
 } from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
 
@@ -67,27 +68,39 @@ export class AppController {
     return this.userService.register(createUserDto)
   }
 
-  @Post('/update-profile')
+  @Post('/update-avatar')
   @UseInterceptors(
     FileInterceptor('file', {
       dest: '/tmp/',
     }),
   )
-  async uploadFile(
+  async updateAvatar(
     @Req() request: Request,
-    @Body() { displayName }: UpdateUserDto,
+    @Body() { deleteAvatar }: UpdateAvatarDto,
     @UploadedFile() file?: Express.Multer.File,
+  ) {
+    const user = await this.getUser(request)
+    const tasks: Array<Promise<unknown>> = []
+    if (file) {
+      tasks.push(this.imageService.saveImage(user, file))
+    }
+    if (deleteAvatar) {
+      tasks.push(this.imageService.deleteImage(user))
+    }
+    await Promise.all(tasks)
+    return true
+  }
+
+  @Post('/update-name')
+  async updateName(
+    @Req() request: Request,
+    @Body() { displayName }: UpdateNameDto,
   ) {
     const user = await this.getUser(request)
     const tasks: Array<Promise<unknown>> = []
     if (displayName) {
       tasks.push(this.userService.updateUser(user, { displayName }))
     }
-    if (file) {
-      tasks.push(this.imageService.saveImage(user, file))
-    }
-    await Promise.all(tasks)
-    return true
   }
 
   @Get('/image')
