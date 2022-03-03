@@ -30,7 +30,8 @@
   let firstScroll = true
 
   const resizePlaceholder = () => {
-    const lastMessage = wrapper.lastElementChild as HTMLElement
+    const lastMessage = wrapper?.lastElementChild as HTMLElement | undefined
+    if (!lastMessage) return
     const place =
       placeholder.offsetHeight +
       wrapper.offsetHeight -
