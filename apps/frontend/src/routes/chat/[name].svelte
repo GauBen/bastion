@@ -54,6 +54,7 @@
 
   onMount(() => {
     resizePlaceholder()
+    window.addEventListener('resize', resizePlaceholder, { passive: true })
 
     socket = io()
     socket.on('message', (message) => {
