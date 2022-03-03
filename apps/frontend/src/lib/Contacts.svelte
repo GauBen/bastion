@@ -7,7 +7,7 @@
     name: string
     displayName: string
     admin: boolean
-  }[] = []
+  }[]
 </script>
 
 <div class="shadow">
