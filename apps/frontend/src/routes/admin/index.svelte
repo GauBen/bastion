@@ -83,7 +83,8 @@
 
   form {
     position: relative;
-    padding: 1em 2em;
+    padding: 0 1em;
+    overflow: hidden;
     background-color: $light-background;
     max-width: 100%;
     border-bottom: 1px solid $border;
