@@ -8,8 +8,8 @@ import {
 import { User } from '@prisma/client'
 import canvas from 'canvas'
 import { createReadStream, existsSync } from 'fs'
-import { writeFile } from 'fs/promises'
-import { extname } from 'path'
+import { copyFile } from 'fs/promises'
+import { default as sizeOf } from 'image-size'
 
 const { createCanvas, registerFont } = canvas
 const __dirname = new URL('.', import.meta.url).pathname
@@ -17,29 +17,46 @@ const storage = `${__dirname}/../../../../storage/profile-pictures/`
 
 @Injectable()
 export class ImageService {
-  saveImage(
-    { name }: User,
-    { buffer, originalname, size }: Express.Multer.File,
-  ) {
-    const extension = extname(originalname)
-    const validExt = ['.jpeg', '.jpg', '.png']
-    if (validExt.includes(extension)) {
+  saveImage({ name }: User, { size, path }: Express.Multer.File) {
+    // Check file extension with image-size
+    let fileInfo
+    try {
+      fileInfo = sizeOf(path)
+    } catch (error) {
+      throw new BadRequestException([
+        'file type is not supported : use jpeg, jpg or png',
+      ])
+    }
+    if (fileInfo.type === undefined)
+      throw new BadRequestException(['file type seems undefined'])
+    let extension = fileInfo.type
+    if (extension === 'jpeg') extension = 'jpg' // Change extension to jpg if jpeg
+    const validExt = ['jpg', 'png']
+    if (!validExt.includes(extension))
       throw new BadRequestException(['file has wrong type'])
-    }
-    if (size <= 1024 * 1024) {
+
+    // Check file type
+    if (size > 1024 * 1024)
       throw new PayloadTooLargeException(['file is too big'])
-    }
+
+    // Check if file already exists
     const filename = `${storage}${name}.`
-    if (
-      existsSync(filename + 'png') ||
-      existsSync(filename + 'jpg') ||
-      existsSync(filename + 'jpeg')
-    ) {
+    if (existsSync(filename + 'png') || existsSync(filename + 'jpg')) {
       throw new BadRequestException([
         'file already exists, delete it if you want to upload a new one',
       ])
     }
-    return writeFile(`${storage}${name}${extension}`, buffer)
+
+    // Check image dimensions
+    if (fileInfo.height === undefined || fileInfo.width === undefined)
+      throw new BadRequestException(['file has wrong dimensions'])
+    if (fileInfo.height != fileInfo.width)
+      throw new BadRequestException([
+        'file image must have perfect square dimensions',
+      ])
+
+    // Save new profile picture
+    return copyFile(path, `${storage}${name}.${extension}`)
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {

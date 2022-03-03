@@ -68,7 +68,11 @@ export class AppController {
   }
 
   @Post('/update-profile')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      dest: '/tmp/',
+    }),
+  )
   async uploadFile(
     @Req() request: Request,
     @Body() { displayName }: UpdateUserDto,
