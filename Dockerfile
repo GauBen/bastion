@@ -185,6 +185,7 @@ ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 RUN set -eux; \
 	gosu postgres pg_ctl start --wait; \
 	pnpm prisma migrate deploy; \
+	gosu postgres pg_ctl stop --wait; \
 	rm -rf ./prisma/migrations/
 
 EXPOSE 3000
