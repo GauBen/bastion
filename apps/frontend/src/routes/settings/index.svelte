@@ -16,7 +16,6 @@
 
 <script lang="ts">
   let displayName = $session.user?.displayName ?? ''
-  let files: FileList | undefined
   let errors: { [x: string]: string[] } = {
     displayName: [],
   }
@@ -27,8 +26,7 @@
   const submit = async () => {
     const body = new FormData()
     if (displayName.length > 0) body.append('displayName', displayName)
-
-    const response = await fetch('/api/update-profile', {
+    const response = await fetch('/api/update-name', {
       method: 'POST',
       body,
     })

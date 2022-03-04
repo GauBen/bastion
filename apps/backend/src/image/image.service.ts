@@ -8,8 +8,7 @@ import {
 import { User } from '@prisma/client'
 import canvas from 'canvas'
 import { createReadStream, existsSync } from 'fs'
-import { unlink } from 'fs/promises'
-import { copyFile } from 'fs/promises'
+import { copyFile, unlink } from 'fs/promises'
 import { default as sizeOf } from 'image-size'
 
 const { createCanvas, registerFont } = canvas
@@ -69,15 +68,18 @@ export class ImageService {
         'deleteAvatar impossible because file does not exist',
       ])
     }
-    try {
-      await unlink(`${filename}.jpg`)
-    } catch (error) {
-      throw new BadRequestException(['deleteAvatar impossible jpg'])
-    }
-    try {
-      await unlink(`${filename}.png`)
-    } catch (error) {
-      throw new BadRequestException(['deleteAvatar impossible png'])
+    if (existsSync(`${filename}.jpg`)) {
+      try {
+        await unlink(`${filename}.jpg`)
+      } catch (error) {
+        throw new BadRequestException(['deleteAvatar impossible jpg'])
+      }
+    } else {
+      try {
+        await unlink(`${filename}.png`)
+      } catch (error) {
+        throw new BadRequestException(['deleteAvatar impossible png'])
+      }
     }
   }
 

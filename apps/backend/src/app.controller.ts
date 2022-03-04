@@ -97,10 +97,11 @@ export class AppController {
     @Body() { displayName }: UpdateNameDto,
   ) {
     const user = await this.getUser(request)
-    const tasks: Array<Promise<unknown>> = []
+    console.log(displayName)
     if (displayName) {
-      tasks.push(this.userService.updateUser(user, { displayName }))
+      await this.userService.updateUser(user, { displayName })
     }
+    return 'toto'
   }
 
   @Get('/image')

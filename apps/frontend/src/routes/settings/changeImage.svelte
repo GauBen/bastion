@@ -54,6 +54,10 @@
       errors = errors
       return
     }
+    if (response.status < 400) {
+      // reload page
+      location.reload()
+    }
   }
 
   function setDelVal() {
