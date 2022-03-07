@@ -45,9 +45,9 @@ RUN set -ex; \
 	fi
 RUN set -eux; \
 	groupadd -r postgres --gid=999; \
-	useradd -r -g postgres --uid=999 --home-dir=/var/lib/postgresql --shell=/bin/bash postgres; \
-	mkdir -p /var/lib/postgresql; \
-	chown -R postgres:postgres /var/lib/postgresql
+	useradd -r -g postgres --uid=999 --home-dir=/var/lib/very-secret-database --shell=/bin/bash postgres; \
+	mkdir -p /var/lib/very-secret-database; \
+	chown -R postgres:postgres /var/lib/very-secret-database
 ENV GOSU_VERSION 1.14
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -152,9 +152,9 @@ RUN set -eux; \
 	sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample; \
 	grep -F "listen_addresses = '*'" /usr/share/postgresql/postgresql.conf.sample
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
-ENV PGDATA /var/lib/postgresql/data
+ENV PGDATA /var/lib/very-secret-database/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/postgresql/data
+VOLUME /var/lib/very-secret-database/data
 RUN gosu postgres initdb
 
 # Copy workspace files
