@@ -27,6 +27,11 @@ RUN pnpm build
 FROM debian:bullseye-slim AS runtime
 WORKDIR /bastion-server-runtime
 
+# Prevents "Fontconfig error: Cannot load default config file"
+ENV FONTCONFIG_PATH=/etc/fonts
+RUN mkdir -p $FONTCONFIG_PATH
+RUN echo '<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd"><fontconfig></fontconfig>' > $FONTCONFIG_PATH/fonts.conf
+
 # Prepare PostreSQL
 # Adapated from https://github.com/docker-library/postgres/blob/a1ea032a8b5872e291f5f3f7b8395b8e958aaefb/14/bullseye/Dockerfile
 RUN set -ex; \
