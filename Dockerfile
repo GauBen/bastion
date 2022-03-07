@@ -158,7 +158,7 @@ RUN gosu postgres initdb
 
 # Copy workspace files
 COPY --from=build /bastion-build/.yarn/ ./.yarn/
-COPY --from=build /bastion-build/package.json /bastion-build/.yarnrc.yml /bastion-build/.yarnrc.yml /bastion-build/run.js ./
+COPY --from=build /bastion-build/package.json /bastion-build/.yarnrc.yml /bastion-build/run.js ./
 
 # Copy Volta
 ENV VOLTA_HOME=/root/.volta
@@ -177,6 +177,7 @@ COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
 
 # Install dependencies
 RUN yarn workspaces focus --production --all
+RUN rm -rf .yarn/cache
 
 # Start the application on port 3000
 ENV DATABASE_URL="postgresql://postgres@localhost:5432/postgres?schema=public"
