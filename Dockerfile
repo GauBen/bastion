@@ -171,7 +171,7 @@ COPY --from=build /root/.volta/ /root/.volta/
 # Copy build artifacts
 COPY --from=build /bastion-build/prisma/ ./prisma/
 COPY --from=build /bastion-build/storage/ ./storage/
-VOLUME /bastion-build/storage/
+VOLUME /bastion-server-runtime/storage/
 COPY --from=build /bastion-build/apps/backend/package.json ./apps/backend/
 COPY --from=build /bastion-build/apps/backend/resources/ ./apps/backend/resources/
 COPY --from=build /bastion-build/apps/backend/build/ ./apps/backend/build/
