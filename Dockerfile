@@ -15,13 +15,12 @@ RUN set -eux; \
 
 # Copy the whole monorepo
 COPY . .
-RUN volta install node && volta install corepack
 
 # Install dependencies and build the whole monorepo
 ENV VITE_API_PORT=3000
 ENV VITE_TENOR_KEY=O7AM9I8X5QC3
-RUN pnpm install --frozen-lockfile
-RUN pnpm build
+RUN yarn install --immutable
+RUN yarn build
 
 # Runtime stage
 FROM debian:bullseye-20220228-slim AS runtime
@@ -158,15 +157,13 @@ VOLUME /var/lib/very-secret-database/data
 RUN gosu postgres initdb
 
 # Copy workspace files
-COPY --from=build /bastion-build/package.json /bastion-build/pnpm-lock.yaml /bastion-build/pnpm-workspace.yaml /bastion-build/run.js ./
+COPY --from=build /bastion-build/.yarn/ ./.yarn/
+COPY --from=build /bastion-build/package.json /bastion-build/.yarnrc.yml /bastion-build/.yarnrc.yml /bastion-build/run.js ./
 
 # Copy Volta
 ENV VOLTA_HOME=/root/.volta
 ENV PATH=$VOLTA_HOME/bin:$PATH
 COPY --from=build /root/.volta/ /root/.volta/
-
-# Not copying pnpm's store produces a smaller image
-# COPY --from=build /root/.pnpm-store/v3/ /root/.pnpm-store/v3/
 
 # Copy build artifacts
 COPY --from=build /bastion-build/prisma/ ./prisma/
@@ -178,9 +175,8 @@ COPY --from=build /bastion-build/apps/backend/build/ ./apps/backend/build/
 COPY --from=build /bastion-build/apps/frontend/package.json ./apps/frontend/
 COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
 
-# Install dependencies and prune pnpm's store
-RUN pnpm install --prod --frozen-lockfile
-RUN pnpm prune && pnpm store prune
+# Install dependencies
+RUN yarn workspaces focus --production --all
 
 # Start the application on port 3000
 ENV DATABASE_URL="postgresql://postgres@localhost:5432/postgres?schema=public"
@@ -190,7 +186,7 @@ ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 # Apply migrations
 RUN set -eux; \
 	gosu postgres pg_ctl start --wait; \
-	pnpm prisma migrate deploy; \
+	yarn prisma migrate deploy; \
 	gosu postgres pg_ctl stop --wait; \
 	rm -rf ./prisma/migrations/
 

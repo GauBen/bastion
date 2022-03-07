@@ -13,8 +13,6 @@ echo "Docker Compose: $(docker-compose --version --short) (^2.2.3)"
 echo
 
 echo -e "${RED}▮  Installing dependencies${NC}"
-volta install node
-volta install corepack
 yarn install
 echo
 

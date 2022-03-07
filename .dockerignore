@@ -1,4 +1,11 @@
 .*
+!.yarn/cache/
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/sdks/
+!.yarn/versions/
+!.yarnrc.yml
 **/node_modules/
 Dockerfile
 docker-compose.yml

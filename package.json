@@ -11,15 +11,16 @@
   "packageManager": "yarn@3.2.0",
   "private": true,
   "scripts": {
-    "build": "yarn workspaces foreach -pt run build",
-    "clean": "yarn workspaces foreach -pt run clean",
-    "dev": "NODE_ENV=development yarn workspaces foreach -pi run dev",
-    "lint": "yarn workspaces foreach -pt run lint",
+    "build": "yarn workspaces foreach -pv run build",
+    "clean": "yarn workspaces foreach -p run clean",
+    "dev": "NODE_ENV=development yarn workspaces foreach -piv run dev",
+    "lint": "yarn workspaces foreach -pv run lint",
     "start": "NODE_ENV=production node ."
   },
   "type": "module",
   "volta": {
-    "node": "16.14.0"
+    "node": "17.6.0",
+    "yarn": "1.22.17"
   },
   "workspaces": [
     "apps/*"
