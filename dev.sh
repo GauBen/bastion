@@ -15,7 +15,7 @@ echo
 echo -e "${RED}▮  Installing dependencies${NC}"
 volta install node
 volta install corepack
-pnpm install
+yarn install
 echo
 
 echo -e "${RED}▮  Starting a local database server${NC}"
@@ -24,11 +24,11 @@ if [ ! -f '.env' ]; then
   echo ".env file not found, using the default (.env.example)"
   cp .env.example .env
 fi
-pnpm prisma migrate deploy
-pnpm prisma generate
+yarn prisma migrate deploy
+yarn prisma generate
 function cleanup() { docker-compose stop; echo; }
 trap cleanup EXIT
 echo
 
 echo -e "${RED}▮  Starting the local development server on http://localhost:8080${NC}"
-pnpm dev
+yarn dev

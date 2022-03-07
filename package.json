@@ -8,17 +8,20 @@
     "prisma": "^3.10.0"
   },
   "main": "run.js",
-  "packageManager": "pnpm@6.32.3",
+  "packageManager": "yarn@3.2.0",
   "private": true,
   "scripts": {
-    "build": "pnpm run build --recursive",
-    "clean": "pnpm run clean --recursive",
-    "dev": "NODE_ENV=development pnpm run dev --recursive",
-    "lint": "pnpm run lint --recursive",
+    "build": "yarn workspaces foreach -pt run build",
+    "clean": "yarn workspaces foreach -pt run clean",
+    "dev": "NODE_ENV=development yarn workspaces foreach -pi run dev",
+    "lint": "yarn workspaces foreach -pt run lint",
     "start": "NODE_ENV=production node ."
   },
   "type": "module",
   "volta": {
     "node": "16.14.0"
-  }
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }
