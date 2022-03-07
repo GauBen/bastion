@@ -3,7 +3,7 @@
 # - runtime: starts a database server and the server code
 
 # Build stage
-FROM debian:bullseye-slim AS build
+FROM debian:bullseye-20220228-slim AS build
 WORKDIR /bastion-build
 
 # Install Volta
@@ -24,7 +24,7 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
 # Runtime stage
-FROM debian:bullseye-slim AS runtime
+FROM debian:bullseye-20220228-slim AS runtime
 WORKDIR /bastion-server-runtime
 
 # Prevents "Fontconfig error: Cannot load default config file"
@@ -171,6 +171,7 @@ COPY --from=build /root/.volta/ /root/.volta/
 # Copy build artifacts
 COPY --from=build /bastion-build/prisma/ ./prisma/
 COPY --from=build /bastion-build/storage/ ./storage/
+VOLUME /bastion-build/storage/
 COPY --from=build /bastion-build/apps/backend/package.json ./apps/backend/
 COPY --from=build /bastion-build/apps/backend/resources/ ./apps/backend/resources/
 COPY --from=build /bastion-build/apps/backend/build/ ./apps/backend/build/
