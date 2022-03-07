@@ -1,4 +1,6 @@
-import { Module } from '@nestjs/common'
+import { Module, ValidationPipe } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { default as cookieParser } from 'cookie-parser'
 import { AppController } from './app.controller.js'
 import { ImageService } from './image/image.service.js'
 import { MessageGateway } from './message/message.gateway.js'
@@ -18,3 +20,10 @@ import { UserService } from './user/user.service.js'
   ],
 })
 export class AppModule {}
+
+export const bootstrap = async () => {
+  const app = await NestFactory.create(AppModule)
+  app.use(cookieParser())
+  app.useGlobalPipes(new ValidationPipe())
+  return app
+}
