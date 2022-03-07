@@ -13,9 +13,9 @@ export class CreateUserDto {
   @Matches(/^[a-z]/i, {
     message: ({ property }) => `${property} must start with a letter`,
   })
-  @Matches(/^[a-z._]+$/i, {
+  @Matches(/^[a-z0-9._]+$/i, {
     message: ({ property }) =>
-      `${property} must be made of letters, dots and underscores`,
+      `${property} must be made of letters, numbers, dots and underscores`,
   })
   name!: string
 
