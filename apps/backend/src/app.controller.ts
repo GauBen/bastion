@@ -23,7 +23,6 @@ import {
   FindUsersDto,
   PromoteUserDto,
   UpdateNameDto,
-  UpdateAvatarDto,
 } from './user/user.dto.js'
 import { UserService } from './user/user.service.js'
 
@@ -68,40 +67,31 @@ export class AppController {
     return this.userService.register(createUserDto)
   }
 
-  @Post('/update-avatar')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      dest: '/tmp/',
-    }),
-  )
-  async updateAvatar(
-    @Req() request: Request,
-    @Body() { deleteAvatar }: UpdateAvatarDto,
-    @UploadedFile() file?: Express.Multer.File,
-  ) {
-    const user = await this.getUser(request)
-    const tasks: Array<Promise<unknown>> = []
-    if (file) {
-      tasks.push(this.imageService.saveImage(user, file))
-    }
-    if (deleteAvatar) {
-      tasks.push(this.imageService.deleteImage(user))
-    }
-    await Promise.all(tasks)
-    return true
-  }
-
   @Post('/update-name')
   async updateName(
     @Req() request: Request,
     @Body() { displayName }: UpdateNameDto,
   ) {
     const user = await this.getUser(request)
-    console.log(displayName)
-    if (displayName) {
-      await this.userService.updateUser(user, { displayName })
-    }
-    return 'toto'
+    return this.userService.updateUser(user, { displayName })
+  }
+
+  @Post('/update-image')
+  @UseInterceptors(FileInterceptor('image', { dest: '/tmp/' }))
+  async updateAvatar(
+    @Req() request: Request,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    const user = await this.getUser(request)
+    if (!file) return
+    await this.imageService.deleteImage(user)
+    return this.imageService.saveImage(user, file)
+  }
+
+  @Post('/delete-image')
+  async deleteImage(@Req() request: Request) {
+    const user = await this.getUser(request)
+    return this.imageService.deleteImage(user)
   }
 
   @Get('/image')

@@ -9,7 +9,7 @@ import { User } from '@prisma/client'
 import canvas from 'canvas'
 import { createReadStream, existsSync } from 'fs'
 import { copyFile, unlink } from 'fs/promises'
-import { default as sizeOf } from 'image-size'
+import { imageSize } from 'image-size'
 
 const { createCanvas, registerFont } = canvas
 const __dirname = new URL('.', import.meta.url).pathname
@@ -17,70 +17,32 @@ const storage = `${__dirname}/../../../../storage/profile-pictures/`
 
 @Injectable()
 export class ImageService {
-  saveImage({ name }: User, { size, path }: Express.Multer.File) {
-    // Check file type with image-size
-    let fileInfo
+  async saveImage({ name }: User, { size, path }: Express.Multer.File) {
+    if (size > 102400)
+      throw new PayloadTooLargeException([
+        'file too big, the maximum size is 100 kB',
+      ])
+
     try {
-      fileInfo = sizeOf(path)
+      const { width, height, type } = imageSize(path)
+
+      if (type !== 'png' && type !== 'jpg')
+        throw new BadRequestException(['the image has to be png or jpg'])
+      if (width !== height)
+        throw new BadRequestException(['the image must be a square'])
+
+      await copyFile(path, `${storage}${name}.${type}`)
+      return true
     } catch (error) {
-      throw new BadRequestException([
-        'file type is not supported : use jpeg, jpg or png',
-      ])
+      if (error instanceof BadRequestException) throw error
+      throw new BadRequestException(['file is not an image'])
     }
-    if (fileInfo.type === undefined)
-      throw new BadRequestException(['file type seems undefined'])
-    let extension = fileInfo.type
-    if (extension === 'jpeg') extension = 'jpg' // Change extension to jpg if jpeg
-    const validExt = ['jpg', 'png']
-    if (!validExt.includes(extension))
-      throw new BadRequestException([
-        'file has wrong type : use jpeg, jpg or png',
-      ])
-
-    // Check file size
-    if (size > 1024 * 1024)
-      throw new PayloadTooLargeException(['file is too big'])
-
-    // Check if file already exists
-    const filename = `${storage}${name}.`
-    if (existsSync(filename + 'png') || existsSync(filename + 'jpg')) {
-      throw new BadRequestException([
-        'file already exists, delete it if you want to upload a new one',
-      ])
-    }
-
-    // Check image dimensions (must be square)
-    if (fileInfo.height === undefined || fileInfo.width === undefined)
-      throw new BadRequestException(['file has wrong dimensions'])
-    if (fileInfo.height != fileInfo.width)
-      throw new BadRequestException([
-        'file image must have perfect square dimensions',
-      ])
-
-    // Save new profile picture
-    return copyFile(path, `${storage}${name}.${extension}`)
   }
 
   async deleteImage({ name }: User) {
-    const filename = `${storage}${name}`
-    if (!existsSync(`${filename}.jpg`) && !existsSync(`${filename}.png`)) {
-      throw new BadRequestException([
-        'deleteAvatar impossible because file does not exist',
-      ])
-    }
-    if (existsSync(`${filename}.jpg`)) {
-      try {
-        await unlink(`${filename}.jpg`)
-      } catch (error) {
-        throw new BadRequestException(['deleteAvatar impossible jpg'])
-      }
-    } else {
-      try {
-        await unlink(`${filename}.png`)
-      } catch (error) {
-        throw new BadRequestException(['deleteAvatar impossible png'])
-      }
-    }
+    for (const ext of ['png', 'jpg'])
+      if (existsSync(`${storage}${name}.${ext}`))
+        await unlink(`${storage}${name}.${ext}`)
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {

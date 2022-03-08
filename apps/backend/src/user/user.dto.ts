@@ -24,15 +24,8 @@ export class CreateUserDto {
 }
 
 export class UpdateNameDto {
-  @IsOptional()
   @Length(1, 30)
-  displayName?: string
-}
-
-export class UpdateAvatarDto {
-  @IsOptional()
-  @IsString()
-  deleteAvatar?: string
+  displayName!: string
 }
 
 export class PromoteUserDto {
