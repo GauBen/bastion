@@ -13,7 +13,7 @@
   "scripts": {
     "build": "yarn workspaces foreach -pv run build",
     "clean": "yarn workspaces foreach -p run clean",
-    "dev": "NODE_ENV=development yarn workspaces foreach -piv run dev",
+    "dev": "NODE_ENV=development BASTION_STORAGE=$(pwd)/storage yarn workspaces foreach -piv run dev",
     "lint": "yarn workspaces foreach -pv run lint",
     "start": "NODE_ENV=production node ."
   },

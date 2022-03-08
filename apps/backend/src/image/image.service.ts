@@ -11,9 +11,12 @@ import { createReadStream, existsSync } from 'fs'
 import { copyFile, unlink } from 'fs/promises'
 import { imageSize } from 'image-size'
 
+if (process.env.BASTION_STORAGE === undefined)
+  throw new Error('BASTION_STORAGE not defined')
+
 const { createCanvas, registerFont } = canvas
 const __dirname = new URL('.', import.meta.url).pathname
-const storage = `${__dirname}/../../../../storage/profile-pictures/`
+const storage = `${process.env.BASTION_STORAGE}/profile-pictures`
 
 @Injectable()
 export class ImageService {
@@ -24,14 +27,14 @@ export class ImageService {
       ])
 
     try {
-      const { width, height, type } = imageSize(path)
+      const { width, height, type: ext } = imageSize(path)
 
-      if (type !== 'png' && type !== 'jpg')
+      if (ext !== 'png' && ext !== 'jpg')
         throw new BadRequestException(['the image has to be png or jpg'])
       if (width !== height)
         throw new BadRequestException(['the image must be a square'])
 
-      await copyFile(path, `${storage}${name}.${type}`)
+      await copyFile(path, `${storage}/${name}.${ext}`)
       return true
     } catch (error) {
       if (error instanceof BadRequestException) throw error
@@ -41,16 +44,16 @@ export class ImageService {
 
   async deleteImage({ name }: User) {
     for (const ext of ['png', 'jpg'])
-      if (existsSync(`${storage}${name}.${ext}`))
-        await unlink(`${storage}${name}.${ext}`)
+      if (existsSync(`${storage}/${name}.${ext}`))
+        await unlink(`${storage}/${name}.${ext}`)
   }
 
   getImage(name: string, extensions: string[]): StreamableFile {
-    for (const extension of extensions) {
-      const filename = `${storage}${name}.${extension}`
+    for (const ext of extensions) {
+      const filename = `${storage}/${name}.${ext}`
       if (existsSync(filename))
         return new StreamableFile(createReadStream(filename), {
-          type: `image/${extension}`,
+          type: `image/${ext}`,
         })
     }
     throw new NotFoundException()

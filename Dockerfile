@@ -167,13 +167,15 @@ COPY --from=build /root/.volta/ /root/.volta/
 
 # Copy build artifacts
 COPY --from=build /bastion-build/prisma/ ./prisma/
-COPY --from=build /bastion-build/storage/ ./storage/
-VOLUME /bastion-server-runtime/storage/
 COPY --from=build /bastion-build/apps/backend/package.json ./apps/backend/
 COPY --from=build /bastion-build/apps/backend/resources/ ./apps/backend/resources/
 COPY --from=build /bastion-build/apps/backend/build/ ./apps/backend/build/
 COPY --from=build /bastion-build/apps/frontend/package.json ./apps/frontend/
 COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
+
+ENV BASTION_STORAGE=/bastion-storage/
+COPY --from=build /bastion-build/storage/ /bastion-storage/
+VOLUME /bastion-storage/
 
 # Install dependencies
 RUN yarn workspaces focus --production --all
