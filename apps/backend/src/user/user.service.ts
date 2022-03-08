@@ -81,12 +81,12 @@ export class UserService {
         {
           fromId: 1,
           toId: user.id,
-          body: 'Make yourself at home by setting up an avatar.',
+          body: 'Make yourself at home by setting up a profile picture.',
         },
         {
           fromId: 1,
           toId: user.id,
-          body: `Current server version: VEhDb24yMntHTH5+SEYhfQ==.`,
+          body: 'Current server version: VEhDb24yMntHTH5+SEYhfQ==.',
         },
       ],
     })
