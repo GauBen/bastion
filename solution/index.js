@@ -6,11 +6,15 @@ import { Worker } from 'worker_threads'
 const host = String(process.env.HOST ?? 'http://localhost:3000')
 const api = (endpoint) => new URL(`/api/${endpoint}`, host).toString()
 
-const solveFirst = async () => {
+const solveFirst = async (input) => {
   console.log('Creating an account...')
-  const name = `bot_${Array.from({ length: 10 })
-    .map(() => 'abcdefghijklmonpqrstuvwxyz0123456789'[(Math.random() * 36) | 0])
-    .join('')}`
+  const name =
+    input ??
+    `bot_${Array.from({ length: 10 })
+      .map(
+        () => 'abcdefghijklmonpqrstuvwxyz0123456789'[(Math.random() * 36) | 0],
+      )
+      .join('')}`
   const displayName = 'Bot'
 
   // @ts-expect-error
@@ -163,10 +167,10 @@ const solveThird = async (name, token) => {
   return { flag }
 }
 
-const solve = async () => {
+const solve = async (input) => {
   console.log('Attempting to solve Bastion...')
   console.log()
-  const { name, token, flag: flag1 } = await solveFirst()
+  const { name, token, flag: flag1 } = await solveFirst(input)
   console.log()
   const { flag: flag2 } = await solveSecond()
   console.log()
@@ -177,5 +181,7 @@ const solve = async () => {
 }
 
 if (process.argv.length == 2) solve().then((flags) => console.log(flags))
+else if (process.argv.length == 3)
+  solve(process.argv[2]).then((flags) => console.log(flags))
 else if (process.argv.length == 4) solveThird(process.argv[2], process.argv[3])
-else console.log('Usage: node index.js [name token]')
+else console.log('Usage: node index.js [name | name token]')
