@@ -6,6 +6,7 @@ Dockerfile
 docker-compose.yml
 LICENSE
 REAME.md
+solution/
 storage/
 !storage/profile-pictures/
 storage/profile-pictures/.gitignore
