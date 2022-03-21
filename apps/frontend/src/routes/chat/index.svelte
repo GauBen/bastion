@@ -21,7 +21,7 @@
   export const submit = async () => {
     const response = await fetch(`/api/user/${encodeURIComponent(name)}`)
     error = undefined
-    if (response.status >= 400) {
+    if (!response.ok) {
       error = 'User not found.'
       return
     }

@@ -41,7 +41,7 @@
       errors = []
       success = undefined
 
-      if (response.status >= 400) {
+      if (!response.ok) {
         errors = body.message.map((message: string) =>
           message.replace(/^displayName/, 'display name'),
         )
@@ -65,7 +65,7 @@
     errors = []
     success = undefined
 
-    if (response.status >= 400) {
+    if (!response.ok) {
       errors = responseBody.message
     } else {
       success = 'profile picture updated'

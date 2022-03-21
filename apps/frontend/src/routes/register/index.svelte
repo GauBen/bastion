@@ -34,7 +34,7 @@
       displayName: [],
     }
 
-    if (response.status >= 400) {
+    if (!response.ok) {
       const messages: string[] = body?.message ?? []
       for (const message of messages) {
         const index = message.indexOf(' ')

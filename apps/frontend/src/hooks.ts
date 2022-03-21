@@ -9,7 +9,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   const { token } = parse(event.request.headers.get('Cookie') ?? '')
   if (token) {
     const response = await forward(event.request, '/api/me')
-    if (response.status < 400) event.locals.user = await response.json()
+    if (response.ok) event.locals.user = await response.json()
   }
   return resolve(event)
 }
