@@ -17,5 +17,5 @@ The whole project is designed to run in a single container:
 docker build . --tag bastion:latest
 
 # Start the container
-docker run -it -p 3000:3000 bastion:latest
+docker run -it -p 1314:1314 bastion:latest
 ```

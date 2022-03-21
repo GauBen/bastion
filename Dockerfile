@@ -17,7 +17,7 @@ RUN set -eux; \
 COPY . .
 
 # Install dependencies and build the whole monorepo
-ENV VITE_API_PORT=3000
+ENV VITE_API_PORT=1314
 ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 RUN yarn install --immutable
 RUN yarn build
@@ -181,9 +181,9 @@ VOLUME /bastion-storage/
 RUN yarn workspaces focus --production --all
 RUN rm -rf .yarn/cache
 
-# Start the application on port 3000
+# Start the application on port 1314
 ENV DATABASE_URL="postgresql://postgres@localhost:5432/postgres?schema=public"
-ENV VITE_API_PORT=3000
+ENV VITE_API_PORT=1314
 ENV VITE_TENOR_KEY=O7AM9I8X5QC3
 
 # Apply migrations
@@ -193,7 +193,7 @@ RUN set -eux; \
 	gosu postgres pg_ctl stop --wait; \
 	rm -rf ./prisma/migrations/
 
-EXPOSE 3000
+EXPOSE 1314
 STOPSIGNAL SIGINT
 
 COPY ./docker-entrypoint.sh ./
