@@ -132,8 +132,12 @@
 
   form {
     display: flex;
+  }
 
-    > input {
+  form,
+  .keyboard {
+    input,
+    :global(.search) {
       height: 2em;
       flex: 1;
       padding: 0.25em;
@@ -141,7 +145,8 @@
       border-radius: 0.5em;
     }
 
-    > button {
+    button,
+    :global(.close) {
       height: 2em;
       border: 0;
       background: none;
