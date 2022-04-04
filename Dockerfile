@@ -153,7 +153,6 @@ RUN set -eux; \
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
 ENV PGDATA /var/lib/very-secret-database/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
-VOLUME /var/lib/very-secret-database/data
 RUN gosu postgres initdb
 
 # Copy workspace files
@@ -175,7 +174,6 @@ COPY --from=build /bastion-build/apps/frontend/build/ ./apps/frontend/build/
 
 ENV BASTION_STORAGE=/bastion-storage/
 COPY --from=build /bastion-build/storage/ /bastion-storage/
-VOLUME /bastion-storage/
 
 # Install dependencies
 RUN yarn workspaces focus --production --all
@@ -194,6 +192,8 @@ RUN set -eux; \
 	rm -rf ./prisma/migrations/
 
 EXPOSE 1314
+VOLUME /bastion-storage/
+VOLUME /var/lib/very-secret-database/data
 STOPSIGNAL SIGINT
 
 COPY ./docker-entrypoint.sh ./
