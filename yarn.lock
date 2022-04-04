@@ -1325,7 +1325,7 @@ __metadata:
     rxjs: ^7.5.4
     socket.io: ^4.4.1
     source-map-support: ^0.5.21
-    svelte-tenor: ^0.1.3
+    svelte-tenor: ^0.1.4
     ts-loader: ^9.2.7
     ts-node: ^10.7.0
     tsconfig-paths: ^3.13.0
@@ -2856,7 +2856,7 @@ __metadata:
     svelte: ^3.46.4
     svelte-check: ^2.4.5
     svelte-preprocess: ^4.10.4
-    svelte-tenor: ^0.1.3
+    svelte-tenor: ^0.1.4
     tslib: ^2.3.1
     typescript: ^4.6.2
   languageName: unknown
@@ -5227,10 +5227,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-tenor@npm:^0.1.3":
-  version: 0.1.3
-  resolution: "svelte-tenor@npm:0.1.3"
-  checksum: 37f8d024b3de4256f97e2964ce500bcdc297b44195da6af683147971eac756d69a2e5571194391acd8ed35b940e2a931f84bd54e532d3a8b2c78a0fc1ce01d07
+"svelte-tenor@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "svelte-tenor@npm:0.1.4"
+  checksum: b8a1871ae9a2bcf74d4ac4fab7b786313c51cdbcd549e5a74dbf6fab46b19fb7fc785e8cfa178d615dd4f7926ff3c249c1db0e1e60016de309cccba8efc548cd
   languageName: node
   linkType: hard
 
