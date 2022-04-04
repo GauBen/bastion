@@ -1,4 +1,5 @@
 .*
+*.txt
 !.yarn/
 !.yarnrc.yml
 **/node_modules/
@@ -7,6 +8,8 @@ docker-compose.yml
 LICENSE
 REAME.md
 solution/
+dev.sh
+solve.sh
 storage/
 !storage/profile-pictures/
 storage/profile-pictures/.gitignore

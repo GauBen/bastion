@@ -1,0 +1,7 @@
+Bastion Inc. is proud to announce the immediate availability of Bastion, its secure instant messaging service! Feel free to make yourself at home and start messaging friends.
+
+You will need to access Bastion on your phone because the desktop version is currently under development. Sorry for the inconvenience.
+
+You will find attached the code of the frontend, because we want anyone to be able to develop an interface to their liking. However, the API code will remain closed.
+
+(More explicitly: the frontend code does not contain any vulnerabilities, and we don't want you to waste time reverse engineering it.)
