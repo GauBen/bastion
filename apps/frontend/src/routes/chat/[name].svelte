@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import Header from '$lib/Header.svelte'
-  import { io, Socket } from '$lib/io'
+  import { io, type Socket } from '$lib/io'
   import type { Load } from '@sveltejs/kit'
   import { onMount, tick } from 'svelte'
   import { Gif, MobileKeyboard } from 'svelte-tenor'
