@@ -192,8 +192,6 @@ RUN set -eux; \
 	rm -rf ./prisma/migrations/
 
 EXPOSE 1314
-VOLUME /bastion-storage/
-VOLUME /var/lib/very-secret-database/data
 STOPSIGNAL SIGINT
 
 COPY ./docker-entrypoint.sh ./
