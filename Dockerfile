@@ -157,7 +157,7 @@ RUN gosu postgres initdb
 
 # Copy workspace files
 COPY --from=build /bastion-build/.yarn/ ./.yarn/
-COPY --from=build /bastion-build/package.json /bastion-build/.yarnrc.yml /bastion-build/run.js ./
+COPY --from=build /bastion-build/package.json /bastion-build/.yarnrc.yml /bastion-build/index.js ./
 
 # Copy Volta
 ENV VOLTA_HOME=/root/.volta
