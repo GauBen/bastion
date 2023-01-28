@@ -33,6 +33,7 @@ RUN echo '<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts
 
 # Prepare PostreSQL
 # Adapated from https://github.com/docker-library/postgres/blob/a1ea032a8b5872e291f5f3f7b8395b8e958aaefb/14/bullseye/Dockerfile
+# If the build breaks, update PG_MAJOR and PG_VERSION with the latest version
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
 		apt-get update; \
@@ -92,9 +93,9 @@ RUN set -ex; \
 	gpg --batch --export --armor "$key" > /usr/local/share/keyrings/postgres.gpg.asc; \
 	command -v gpgconf > /dev/null && gpgconf --kill all; \
 	rm -rf "$GNUPGHOME"
-ENV PG_MAJOR 14
+ENV PG_MAJOR 15
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
-ENV PG_VERSION 14.2-1.pgdg110+1
+ENV PG_VERSION 15.1-1.pgdg110+1
 RUN set -ex; \
 	export PYTHONDONTWRITEBYTECODE=1; \
 	dpkgArch="$(dpkg --print-architecture)"; \
